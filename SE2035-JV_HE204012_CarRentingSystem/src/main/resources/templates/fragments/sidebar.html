@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+<aside th:fragment="sidebar(activeMenu)">
+    <nav class="admin-sidebar">
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">MAIN</div>
+            <a th:href="@{/admin/dashboard}"
+               class="sidebar-item"
+               th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
+                Dashboard
+            </a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">MANAGEMENT</div>
+            <a th:href="@{/admin/producers}"
+               class="sidebar-item"
+               th:classappend="${activeMenu == 'producers' ? 'active' : ''}">
+                Producers
+            </a>
+            <a class="sidebar-item disabled">Cars</a>
+            <a class="sidebar-item disabled">Customers</a>
+            <a class="sidebar-item disabled">Rentals</a>
+        </div>
+
+        <div class="sidebar-section">
+            <div class="sidebar-label">REPORTS</div>
+            <a class="sidebar-item disabled">Statistics</a>
+        </div>
+
+    </nav>
+</aside>
+</body>
+</html>

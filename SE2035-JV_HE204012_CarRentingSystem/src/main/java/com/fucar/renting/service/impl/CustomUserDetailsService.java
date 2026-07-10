@@ -3,7 +3,6 @@ package com.fucar.renting.service.impl;
 import com.fucar.renting.entity.Account;
 import com.fucar.renting.repository.AccountRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -23,11 +22,6 @@ public class CustomUserDetailsService implements UserDetailsService {
             throw new UsernameNotFoundException("Email not found: " + email);
         }
 
-        return User.builder()
-                .username(account.getEmail())
-                .password(account.getPassword())
-                .roles(account.getRole())
-                .disabled(false)
-                .build();
+        return new CustomUserDetails(account);
     }
 }
