@@ -1,0 +1,17 @@
+.auth-body {
+    background: var(--surface);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 24px;
+}
+
+.auth-card {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 36px 32px;
+    width: 100%;
+    max-width: 420px;
+}

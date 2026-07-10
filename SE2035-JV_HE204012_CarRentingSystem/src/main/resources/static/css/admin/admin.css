@@ -1,0 +1,4 @@
+.dashboard-content {
+    min-height: calc(100vh - 56px);
+    background: var(--bg, #ffffff);
+}

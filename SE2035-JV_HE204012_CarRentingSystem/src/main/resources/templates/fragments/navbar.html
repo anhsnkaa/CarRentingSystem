@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+
+<body>
+<nav th:fragment="navbar(activeMenu)" class="navbar navbar-dark navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand fw-bold" href="/">Car Renting</a>
+        <div class="d-flex align-items-center">
+                <span class="text-light me-3 small">
+                    <span th:text="${#authentication != null ? #authentication.name : 'Guest'}">Guest</span>
+                </span>
+            <form th:action="@{/logout}" method="post" class="m-0">
+                <button type="submit" class="btn btn-outline-light btn-sm">Logout</button>
+            </form>
+        </div>
+    </div>
+</nav>
+</body>
+</html>
