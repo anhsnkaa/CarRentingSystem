@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit Rental</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+</head>
+<body>
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="admin-layout">
+    <div th:replace="~{fragments/sidebar :: sidebar(activeMenu='rentals')}"></div>
+
+    <main class="admin-content" style="max-width: 700px;">
+        <h1 class="mb-4">Edit Rental</h1>
+
+        <form th:action="@{/admin/rentals/{id}(id=${rentalId})}"
+              th:object="${rentalRequest}" method="post" class="card border p-4">
+
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Pickup Date</label>
+                    <input type="date" th:field="*{pickupDate}" class="form-control"
+                           th:classappend="${#fields.hasErrors('pickupDate')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{pickupDate}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Return Date</label>
+                    <input type="date" th:field="*{returnDate}" class="form-control"
+                           th:classappend="${#fields.hasErrors('returnDate')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{returnDate}"></div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Rent Price</label>
+                    <input type="number" step="0.01" th:field="*{rentPrice}" class="form-control"
+                           th:classappend="${#fields.hasErrors('rentPrice')} ? 'is-invalid'">
+                    <div class="invalid-feedback" th:errors="*{rentPrice}"></div>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label class="form-label">Status</label>
+                    <select th:field="*{status}" class="form-select">
+                        <option value="Active">Active</option>
+                        <option value="Completed">Completed</option>
+                        <option value="Cancelled">Cancelled</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between mt-4">
+                <a th:href="@{/admin/rentals}" class="btn btn-outline-secondary">Cancel</a>
+                <button type="submit" class="btn btn-primary">Update</button>
+            </div>
+        </form>
+    </main>
+</div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>

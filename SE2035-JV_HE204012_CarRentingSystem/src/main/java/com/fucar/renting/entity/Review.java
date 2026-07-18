@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "reviews")
+@Table(name = "Review")
 @ToString
 @Builder
 @Data
@@ -16,15 +16,15 @@ public class Review {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id")
-    private Long id;
+    @Column(name = "ID")
+    private Integer id;
 
-    @Column(name = "car_ren_id", nullable = false)
-    private Long carRenId;
+    @Column(name = "CarRenID", nullable = false)
+    private Integer carRenId;
 
-    @Column(name = "review_star", nullable = false)
+    @Column(name = "ReviewStar", nullable = false)
     private Integer reviewStar;
 
-    @Column(name = "comment", nullable = false, length = 1000)
+    @Column(name = "Comment", nullable = false, length = 500)
     private String comment;
 }

@@ -15,13 +15,13 @@
     </div>
     <form th:action="@{/login}" method="post">
         <div>
-            <label class="form-label small fw-bold">Email</label>
+            <label class="form-label small fw-bold">Account Name</label>
             <div>
-                <input type="email" name="email" placeholder="abc@gmail.com " class="form-control" required>
+                <input type="text" name="accountName" placeholder="admin / customer1 / customer2" class="form-control" required>
             </div>
         </div>
 
-        <div>
+        <div class="mt-3">
             <label class="form-label small fw-bold">Password</label>
             <div>
                 <input type="password" name="password" placeholder="******" class="form-control" required minlength="6">
@@ -30,7 +30,7 @@
 
         <button type="submit" class="btn btn-primary w-100 mt-3">Sign in</button>
         <div th:if="${param.error}" class="alert alert-danger small mt-3 mb-0">
-            Invalid email or password.
+            Invalid account name or password.
         </div>
 
         <div th:if="${param.logout}" class="alert alert-success small mt-3 mb-0">
@@ -45,6 +45,11 @@
     <p>Don't have an account?
         <a th:href="@{/register}">Register here</a>
     </p>
+    <p class="text-center mt-2">
+        <a th:href="@{/}" class="small text-decoration-none">← Back to Home</a>
+    </p>
 </div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 </body>
 </html>

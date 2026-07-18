@@ -6,7 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "customers")
+@Table(name = "Customer")
 @ToString
 @Builder
 @Data
@@ -18,27 +18,27 @@ public class Customer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "customer_id")
-    private Long id;
+    @Column(name = "CustomerID")
+    private Integer id;
 
-    @Column(name = "full_name", nullable = false)
+    @Column(name = "FullName", nullable = false, length = 200)
     private String fullName;
 
-    @Column(name = "mobile", nullable = false)
+    @Column(name = "Mobile", nullable = false, length = 15)
     private String mobile;
 
-    @Column(name = "birthday", nullable = false)
+    @Column(name = "Birthday", nullable = false)
     private LocalDate birthday;
 
-    @Column(name = "identity_card", nullable = false)
+    @Column(name = "IdentityCard", nullable = false, length = 20)
     private String identityCard;
 
-    @Column(name = "licence_number", nullable = false)
+    @Column(name = "LicenceNumber", nullable = false, length = 20)
     private String licenceNumber;
 
-    @Column(name = "licence_date", nullable = false)
+    @Column(name = "LicenceDate", nullable = false)
     private LocalDate licenceDate;
 
-    @Column(name = "account_id", nullable = false)
-    private Long accountId;
+    @Column(name = "AccountID", nullable = false)
+    private Integer accountId;
 }

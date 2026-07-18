@@ -21,12 +21,36 @@ body {
     box-shadow: none !important;
 }
 
-.navbar {
+.navbar,
+nav.navbar {
     background-color: var(--navbar-bg) !important;
+    color: #ffffff !important;
+}
+
+.navbar *,
+.navbar .nav-link,
+.navbar a,
+.navbar span,
+.navbar button {
+    color: #ffffff !important;
+}
+
+.navbar .btn-outline-light,
+.navbar button.btn {
+    color: #ffffff !important;
+    border-color: #ffffff !important;
+    background: transparent !important;
+}
+
+.navbar .btn-outline-light:hover,
+.navbar button.btn:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
 }
 
 .navbar-brand {
     letter-spacing: 0.5px;
+    color: #ffffff !important;
 }
 
 .navbar .btn-outline-light {
@@ -63,4 +87,23 @@ body {
 
 .alert {
     border-radius: 4px;
+}
+
+.auth-body {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 100%);
+    padding: 24px;
+}
+
+.auth-card {
+    width: 100%;
+    max-width: 420px;
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
 }

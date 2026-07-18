@@ -24,35 +24,46 @@
         </p>
 
         <div class="row mt-4">
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card border">
                     <div class="card-body">
                         <div class="text-muted small text-uppercase">Producers</div>
-                        <div class="fs-3 fw-bold mt-2">3</div>
+                        <div class="fs-3 fw-bold mt-2" th:text="${producerCount}">0</div>
                         <a th:href="@{/admin/producers}" class="small text-decoration-none">Manage →</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card border">
                     <div class="card-body">
                         <div class="text-muted small text-uppercase">Cars</div>
-                        <div class="fs-3 fw-bold mt-2">6</div>
-                        <span class="small text-muted">(coming soon)</span>
+                        <div class="fs-3 fw-bold mt-2" th:text="${carCount}">0</div>
+                        <a th:href="@{/admin/cars}" class="small text-decoration-none">Manage →</a>
                     </div>
                 </div>
             </div>
-            <div class="col-md-4 mb-3">
+            <div class="col-md-3 mb-3">
                 <div class="card border">
                     <div class="card-body">
                         <div class="text-muted small text-uppercase">Customers</div>
-                        <div class="fs-3 fw-bold mt-2">3</div>
-                        <span class="small text-muted">(coming soon)</span>
+                        <div class="fs-3 fw-bold mt-2" th:text="${customerCount}">0</div>
+                        <a th:href="@{/admin/customers}" class="small text-decoration-none">Manage →</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="card border">
+                    <div class="card-body">
+                        <div class="text-muted small text-uppercase">Rentals</div>
+                        <div class="fs-3 fw-bold mt-2" th:text="${rentalCount}">0</div>
+                        <a th:href="@{/admin/rentals}" class="small text-decoration-none">Manage →</a>
                     </div>
                 </div>
             </div>
         </div>
     </main>
 </div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 </body>
 </html>

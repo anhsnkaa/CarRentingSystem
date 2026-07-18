@@ -9,6 +9,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class AccountServiceImpl implements AccountService {
@@ -17,13 +19,33 @@ public class AccountServiceImpl implements AccountService {
     private final PasswordEncoder passwordEncoder;
 
     @Override
+    public Account findByAccountName(String accountName) {
+        return accountRepository.findByAccountName(accountName);
+    }
+
+    @Override
     public Account findByEmail(String email) {
-        return accountRepository.findByEmail(email);
+        return accountRepository.findByAccountName(email);
+    }
+
+    @Override
+    public Account findById(Integer id) {
+        return accountRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Account> findAll() {
+        return accountRepository.findAll();
     }
 
     @Override
     public boolean existsByEmail(String email) {
         return accountRepository.existsByEmail(email);
+    }
+
+    @Override
+    public boolean existsByAccountName(String accountName) {
+        return accountRepository.existsByAccountName(accountName);
     }
 
     @Override
@@ -34,6 +56,18 @@ public class AccountServiceImpl implements AccountService {
                 .accountName(request.getEmail().split("@")[0])
                 .password(passwordEncoder.encode(request.getPassword()))
                 .role("CUSTOMER")
+                .build();
+        return accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public Account createAdmin(String email, String password) {
+        Account account = Account.builder()
+                .email(email)
+                .accountName(email.split("@")[0])
+                .password(passwordEncoder.encode(password))
+                .role("ADMIN")
                 .build();
         return accountRepository.save(account);
     }

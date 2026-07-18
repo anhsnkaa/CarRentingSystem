@@ -1,36 +1,48 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <body>
-<aside th:fragment="sidebar(activeMenu)">
-    <nav class="admin-sidebar">
+<nav th:fragment="sidebar(activeMenu)" class="admin-sidebar">
+    <div class="sidebar-section">
+        <div class="sidebar-label">MAIN</div>
+        <a th:href="@{/admin/dashboard}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
+            Dashboard
+        </a>
+    </div>
 
-        <div class="sidebar-section">
-            <div class="sidebar-label">MAIN</div>
-            <a th:href="@{/admin/dashboard}"
-               class="sidebar-item"
-               th:classappend="${activeMenu == 'dashboard' ? 'active' : ''}">
-                Dashboard
-            </a>
-        </div>
+    <div class="sidebar-section">
+        <div class="sidebar-label">MANAGEMENT</div>
+        <a th:href="@{/admin/producers}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'producers' ? 'active' : ''}">
+            Producers
+        </a>
+        <a th:href="@{/admin/cars}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'cars' ? 'active' : ''}">
+            Cars
+        </a>
+        <a th:href="@{/admin/customers}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'customers' ? 'active' : ''}">
+            Customers
+        </a>
+        <a th:href="@{/admin/rentals}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'rentals' ? 'active' : ''}">
+            Rentals
+        </a>
+    </div>
 
-        <div class="sidebar-section">
-            <div class="sidebar-label">MANAGEMENT</div>
-            <a th:href="@{/admin/producers}"
-               class="sidebar-item"
-               th:classappend="${activeMenu == 'producers' ? 'active' : ''}">
-                Producers
-            </a>
-            <a class="sidebar-item disabled">Cars</a>
-            <a class="sidebar-item disabled">Customers</a>
-            <a class="sidebar-item disabled">Rentals</a>
-        </div>
-
-        <div class="sidebar-section">
-            <div class="sidebar-label">REPORTS</div>
-            <a class="sidebar-item disabled">Statistics</a>
-        </div>
-
-    </nav>
-</aside>
+    <div class="sidebar-section">
+        <div class="sidebar-label">REPORTS</div>
+        <a th:href="@{/admin/reports}"
+           class="sidebar-item"
+           th:classappend="${activeMenu == 'reports' ? 'active' : ''}">
+            Statistics
+        </a>
+    </div>
+</nav>
 </body>
 </html>

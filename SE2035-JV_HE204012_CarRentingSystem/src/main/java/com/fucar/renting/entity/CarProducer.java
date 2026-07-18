@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "car_producers")
+@Table(name = "CarProducer")
 @ToString
 @Builder
 @Data
@@ -16,15 +16,15 @@ public class CarProducer {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "producer_id")
-    private Long id;
+    @Column(name = "ProducerID")
+    private Integer id;
 
-    @Column(name = "producer_name", nullable = false)
+    @Column(name = "ProducerName", nullable = false, length = 100)
     private String producerName;
 
-    @Column(name = "address", nullable = false)
+    @Column(name = "Address", nullable = false, length = 200)
     private String address;
 
-    @Column(name = "country", nullable = false)
+    @Column(name = "Country", nullable = false, length = 100)
     private String country;
 }

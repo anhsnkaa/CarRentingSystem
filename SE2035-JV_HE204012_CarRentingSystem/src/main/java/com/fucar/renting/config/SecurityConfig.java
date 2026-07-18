@@ -18,8 +18,8 @@ public class SecurityConfig {
                                            AuthenticationSuccessHandler successHandler) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/login", "/register",
-                                "/css/**", "/js/**", "/webjars/**").permitAll()
+                        .requestMatchers("/", "/home", "/login", "/register",
+                                "/css/**", "/js/**", "/webjars/**", "/error", "/error/**").permitAll()
                         .requestMatchers("/admin/**").hasRole("ADMIN")
                         .requestMatchers("/customer/**").hasRole("CUSTOMER")
                         .anyRequest().authenticated()
@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/login")
                         .loginProcessingUrl("/login")
-                        .usernameParameter("email")
+                        .usernameParameter("accountName")
                         .passwordParameter("password")
                         .successHandler(successHandler)
                         .failureUrl("/login?error")

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 @Entity
-@Table(name = "accounts")
+@Table(name = "Account")
 @ToString
 @Builder
 @Data
@@ -16,18 +16,18 @@ public class Account {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "account_id")
-    private Long id;
+    @Column(name = "AccountID")
+    private Integer id;
 
-    @Column(name = "account_name", nullable = false)
+    @Column(name = "AccountName", nullable = false, length = 100)
     private String accountName;
 
-    @Column(name = "email", nullable = false)
+    @Column(name = "Email", nullable = false, length = 200)
     private String email;
 
-    @Column(name = "password", nullable = false)
+    @Column(name = "Password", nullable = false, length = 200)
     private String password;
 
-    @Column(name = "role", nullable = false)
+    @Column(name = "Role", nullable = false, length = 10)
     private String role;
 }
