@@ -2,173 +2,172 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>FU Car Renting - Home</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>FU Car Renting</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}">
-    <style>
-        .hero { background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%); color: #fff; padding: 80px 0; }
-        .step-num { width: 48px; height: 48px; border-radius: 50%; background: #2563eb; color: #fff; display: inline-flex; align-items: center; justify-content: center; font-weight: 700; font-size: 20px; }
-        .car-card { transition: transform 0.15s; height: 100%; }
-        .car-card:hover { transform: translateY(-4px); }
-        .star { color: #f59e0b; }
-    </style>
+    <link rel="stylesheet" th:href="@{/css/home.css}">
 </head>
-<body class="bg-light">
+<body class="home-body">
 
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
-<section class="hero text-center">
+<!-- HERO -->
+<section class="hero">
     <div class="container">
-        <h1 class="display-4 fw-bold mb-3">FU Car Renting System</h1>
-        <p class="lead mb-4">Book a car in minutes. Manage rentals easily. Powered by Spring Boot + Spring Data JPA.</p>
-        <div class="d-flex gap-3 justify-content-center">
-            <a th:href="@{/login}" class="btn btn-light btn-lg fw-bold">Sign in</a>
-            <a th:href="@{/register}" class="btn btn-outline-light btn-lg">Create account</a>
+        <h1>Rent a car in <span>minutes.</span></h1>
+        <p>Browse available vehicles, book online, manage your rentals.</p>
+        <div class="hero-cta">
+            <a th:href="@{/login}" class="btn">Sign in</a>
+            <a th:href="@{/register}" class="btn btn-ghost">Create account</a>
+        </div>
+        <p class="hero-meta">
+            <strong th:text="${carCount}">0</strong> car(s) available now.
+        </p>
+    </div>
+</section>
+
+<!-- FLEET -->
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <p class="label">Fleet</p>
+            <h2>Available cars</h2>
+        </div>
+
+        <div class="fleet" th:if="${!#lists.isEmpty(featuredCars)}">
+            <div class="fleet-card" th:each="c : ${featuredCars}">
+                <div style="display:flex; justify-content:space-between; align-items:start; gap:8px;">
+                    <h3 th:text="${c.carName}">Car Name</h3>
+                    <span class="status" th:text="${c.status}">Available</span>
+                </div>
+                <p class="fleet-spec">
+                    <span th:text="${c.carModelYear}">2024</span> ·
+                    <span th:text="${c.color}">White</span> ·
+                    <span th:text="${c.capacity}">5</span> seats
+                </p>
+                <p class="fleet-desc" th:text="${#strings.abbreviate(c.description, 100)}">Description...</p>
+                <div class="fleet-foot">
+                    <span class="fleet-price">
+                        <span th:text="${#numbers.formatDecimal(c.rentPrice, 0, 'COMMA', 0, 'POINT')}">0</span> đ
+                        <small>/ day</small>
+                    </span>
+                    <a th:href="@{/login}" class="fleet-cta">Book</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="fleet-empty" th:if="${#lists.isEmpty(featuredCars)}">
+            No cars available yet.
         </div>
     </div>
 </section>
 
-<div class="container py-5">
-
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="mb-2">Browse Our Cars</h2>
-            <p class="text-muted">
-                <span th:text="${carCount}">0</span> car(s) currently available.
-                <a th:href="@{/login}" class="ms-2">Sign in to book →</a>
-            </p>
-        </div>
-    </div>
-
-    <div class="row g-4 mb-5" th:if="${!#lists.isEmpty(featuredCars)}">
-        <div class="col-md-4" th:each="c : ${featuredCars}">
-            <div class="card car-card shadow-sm border-0">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-start mb-2">
-                        <h5 class="card-title mb-0" th:text="${c.carName}">Car Name</h5>
-                        <span class="badge bg-success" th:text="${c.status}">Available</span>
-                    </div>
-                    <p class="text-muted small mb-2">
-                        <span th:text="${c.carModelYear}">2024</span> ·
-                        <span th:text="${c.color}">White</span> ·
-                        <span th:text="${c.capacity}">5</span> seats
-                    </p>
-                    <p class="card-text small" th:text="${#strings.abbreviate(c.description, 100)}">Description...</p>
-                    <div class="d-flex justify-content-between align-items-center mt-3">
-                        <span class="fw-bold text-primary"
-                              th:text="${#numbers.formatDecimal(c.rentPrice, 0, 'COMMA', 0, 'POINT')} + ' đ/day'">0 đ/day</span>
-                        <a th:href="@{/login}" class="btn btn-sm btn-outline-primary">Book</a>
-                    </div>
-                </div>
+<!-- STATS -->
+<section class="stats">
+    <div class="container">
+        <div class="stats-grid">
+            <div>
+                <span class="stat-num" th:text="${carCount} + '+'">0+</span>
+                <span class="stat-label">Cars in fleet</span>
+            </div>
+            <div>
+                <span class="stat-num">24/7</span>
+                <span class="stat-label">Booking</span>
+            </div>
+            <div>
+                <span class="stat-num">3 steps</span>
+                <span class="stat-label">To drive</span>
             </div>
         </div>
     </div>
-    <div class="alert alert-info mb-5" th:if="${#lists.isEmpty(featuredCars)}">
-        No cars available yet. Please contact admin.
-    </div>
+</section>
 
-    <div class="row mb-5">
-        <div class="col-12">
-            <h2 class="mb-2">Latest Reviews</h2>
-            <p class="text-muted">What our customers say.</p>
+<!-- REVIEWS -->
+<section class="section">
+    <div class="container">
+        <div class="section-head">
+            <p class="label">Reviews</p>
+            <h2>What customers say</h2>
         </div>
-    </div>
 
-    <div class="row g-4 mb-5" th:if="${!#lists.isEmpty(latestReviews)}">
-        <div class="col-md-4" th:each="rv : ${latestReviews}">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body">
-                    <div class="mb-2">
-                        <th:block th:each="i : ${#numbers.sequence(1, 5)}">
-                            <span class="star" th:text="${i <= rv.reviewStar ? '★' : '☆'}"></span>
-                        </th:block>
-                    </div>
-                    <p class="card-text" th:text="${rv.comment}">Comment...</p>
+        <div th:if="${!#lists.isEmpty(latestReviews)}">
+            <div class="reviews-feature">
+                <div class="stars"
+                     th:text="${#strings.repeat('★', latestReviews[0].reviewStar) + #strings.repeat('☆', 5 - latestReviews[0].reviewStar)}">
+                    ★★★★★
                 </div>
+                <blockquote th:text="${latestReviews[0].comment}">Latest review...</blockquote>
+                <cite>— Verified customer</cite>
             </div>
-        </div>
-    </div>
-    <div class="alert alert-light text-center text-muted mb-5" th:if="${#lists.isEmpty(latestReviews)}">
-        No reviews yet.
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <h2 class="mb-2">For Customers</h2>
-            <p class="text-muted">Rent a car in 3 simple steps.</p>
-        </div>
-    </div>
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">1</div>
-                    <h5>Register</h5>
-                    <p class="text-muted small">Create your account with email and password in under a minute.</p>
+            <div class="review-row" th:each="rv,iter : ${latestReviews}"
+                 th:if="${iter.index > 0}">
+                <div class="stars"
+                     th:text="${#strings.repeat('★', rv.reviewStar) + #strings.repeat('☆', 5 - rv.reviewStar)}">
+                    ★★★★★
                 </div>
+                <p th:text="${#strings.abbreviate(rv.comment, 140)}">Comment...</p>
             </div>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">2</div>
-                    <h5>Browse Cars</h5>
-                    <p class="text-muted small">Explore our wide range of vehicles from trusted brands.</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">3</div>
-                    <h5>Book Online</h5>
-                    <p class="text-muted small">Pick dates, select cars, confirm in one click.</p>
-                </div>
-            </div>
-        </div>
-    </div>
 
-    <div class="row mb-3">
-        <div class="col-12">
-            <h2 class="mb-2">For Administrators</h2>
-            <p class="text-muted">Manage the fleet in 3 simple steps.</p>
+        <div class="reviews-empty" th:if="${#lists.isEmpty(latestReviews)}">
+            No reviews yet.
         </div>
     </div>
-    <div class="row g-4 mb-5">
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">1</div>
-                    <h5>Sign in as Admin</h5>
-                    <p class="text-muted small">Use admin credentials to access the dashboard.</p>
-                </div>
-            </div>
+</section>
+
+<!-- HOW -->
+<section class="section how">
+    <div class="container">
+        <div class="section-head">
+            <p class="label">How it works</p>
+            <h2>Three steps</h2>
         </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">2</div>
-                    <h5>Manage Fleet</h5>
-                    <p class="text-muted small">Add/edit cars, producers, customers, and rental transactions.</p>
-                </div>
+
+        <div class="how-steps">
+            <div class="how-step">
+                <span class="num">01</span>
+                <h4>Register</h4>
+                <p>Create an account with email and password.</p>
             </div>
-        </div>
-        <div class="col-md-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="step-num mb-3">3</div>
-                    <h5>Approve & Complete</h5>
-                    <p class="text-muted small">Mark rentals as completed when customers return cars.</p>
-                </div>
+            <div class="how-step">
+                <span class="num">02</span>
+                <h4>Browse</h4>
+                <p>Pick a car from the fleet.</p>
+            </div>
+            <div class="how-step">
+                <span class="num">03</span>
+                <h4>Book</h4>
+                <p>Confirm dates and drive.</p>
             </div>
         </div>
     </div>
+</section>
 
-</div>
+<!-- CTA -->
+<section class="cta">
+    <div class="container">
+        <h3>Ready to drive?</h3>
+        <p>Sign in to book a car.</p>
+        <a th:href="@{/login}" class="btn">Sign in</a>
+    </div>
+</section>
 
-<footer class="bg-dark text-light py-4 mt-5">
-    <div class="container text-center">
-        <small>&copy; 2026 FU Car Renting System. Powered by Spring Boot.</small>
+<!-- FOOTER -->
+<footer class="footer">
+    <div class="container">
+        <div class="footer-inner">
+            <span>&copy; 2026 FU Car Renting</span>
+            <nav class="footer-nav">
+                <a th:href="@{/}">Home</a>
+                <a th:href="@{/login}">Sign in</a>
+                <a th:href="@{/register}">Register</a>
+            </nav>
+        </div>
     </div>
 </footer>
 
