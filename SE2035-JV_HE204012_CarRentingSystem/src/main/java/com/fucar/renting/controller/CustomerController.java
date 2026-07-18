@@ -4,9 +4,9 @@ import com.fucar.renting.dto.CustomerUpdateRequest;
 import com.fucar.renting.entity.Account;
 import com.fucar.renting.entity.Customer;
 import com.fucar.renting.service.CustomerService;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,8 +15,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import com.fucar.renting.service.impl.CustomUserDetails;
 
 @Controller
 @RequestMapping("/customer")
@@ -31,9 +29,9 @@ public class CustomerController {
     }
 
     @GetMapping("/profile")
-    public String profile(@AuthenticationPrincipal CustomUserDetails principal, Model model) {
-        if (principal == null) return "redirect:/login";
-        Account account = principal.getAccount();
+    public String profile(HttpSession session, Model model) {
+        Account account = (Account) session.getAttribute("currentAccount");
+        if (account == null) return "redirect:/login";
         Customer customer = customerService.findByAccountId(account.getId());
         if (customer == null) {
             return "redirect:/customer/profile/new";
@@ -44,13 +42,14 @@ public class CustomerController {
     }
 
     @PostMapping("/profile")
-    public String updateProfile(@AuthenticationPrincipal CustomUserDetails principal,
-                                @Valid @ModelAttribute("customerRequest") CustomerUpdateRequest request,
+    public String updateProfile(@Valid @ModelAttribute("customerRequest") CustomerUpdateRequest request,
                                 BindingResult binding,
                                 Model model,
-                                RedirectAttributes ra) {
-        if (principal == null) return "redirect:/login";
-        Customer customer = customerService.findByAccountId(principal.getAccount().getId());
+                                RedirectAttributes ra,
+                                HttpSession session) {
+        Account account = (Account) session.getAttribute("currentAccount");
+        if (account == null) return "redirect:/login";
+        Customer customer = customerService.findByAccountId(account.getId());
         if (customer == null) {
             ra.addFlashAttribute("toastMessage", "Profile not found");
             ra.addFlashAttribute("toastType", "error");

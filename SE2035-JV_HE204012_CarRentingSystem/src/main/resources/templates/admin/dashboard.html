@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>Admin Dashboard</title>
@@ -20,7 +20,7 @@
         <div class="page-head">
             <div>
                 <h1>Dashboard</h1>
-                <p class="sub">Signed in as <span sec:authentication="name">admin</span></p>
+                <p class="sub">Signed in as <span th:text="${account != null ? account.accountName : 'admin'}">admin</span></p>
             </div>
         </div>
 

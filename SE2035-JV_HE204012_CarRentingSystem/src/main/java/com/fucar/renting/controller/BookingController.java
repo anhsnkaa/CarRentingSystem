@@ -1,7 +1,9 @@
 package com.fucar.renting.controller;
 
+import com.fucar.renting.config.AuthUtil;
 import com.fucar.renting.dto.BookingRequest;
 import com.fucar.renting.dto.CarRentalRequest;
+import com.fucar.renting.entity.Account;
 import com.fucar.renting.entity.Car;
 import com.fucar.renting.entity.CarProducer;
 import com.fucar.renting.entity.CarRental;
@@ -12,11 +14,10 @@ import com.fucar.renting.service.CarRentalService;
 import com.fucar.renting.service.CarService;
 import com.fucar.renting.service.CustomerService;
 import com.fucar.renting.service.ReviewService;
-import com.fucar.renting.service.impl.CustomUserDetails;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -40,12 +41,13 @@ public class BookingController {
     private final ReviewService reviewService;
 
     @GetMapping
-    public String history(@AuthenticationPrincipal CustomUserDetails principal,
-                          @RequestParam(defaultValue = "1") int page,
+    public String history(@RequestParam(defaultValue = "1") int page,
                           @RequestParam(defaultValue = "10") int size,
+                          HttpSession session,
                           Model model) {
-        if (principal == null) return "redirect:/login";
-        Customer customer = customerService.findByAccountId(principal.getAccount().getId());
+        Account acc = (Account) session.getAttribute("currentAccount");
+        if (acc == null) return "redirect:/login";
+        Customer customer = customerService.findByAccountId(acc.getId());
         if (customer == null) {
             model.addAttribute("rentals", Page.empty());
             model.addAttribute("activeMenu", "bookings");
@@ -107,14 +109,15 @@ public class BookingController {
     }
 
     @PostMapping
-    public String create(@AuthenticationPrincipal CustomUserDetails principal,
-                         @Valid @ModelAttribute("bookingRequest") BookingRequest request,
+    public String create(@Valid @ModelAttribute("bookingRequest") BookingRequest request,
                          BindingResult binding,
                          Model model,
                          RedirectAttributes ra,
+                         HttpSession session,
                          @RequestParam(name = "carId", required = false) Integer carId) {
-        if (principal == null) return "redirect:/login";
-        Customer customer = customerService.findByAccountId(principal.getAccount().getId());
+        Account acc = (Account) session.getAttribute("currentAccount");
+        if (acc == null) return "redirect:/login";
+        Customer customer = customerService.findByAccountId(acc.getId());
         if (customer == null) {
             ra.addFlashAttribute("toastMessage", "Please complete your profile first");
             ra.addFlashAttribute("toastType", "error");
@@ -158,18 +161,19 @@ public class BookingController {
     }
 
     @GetMapping("/{id}")
-    public String detail(@AuthenticationPrincipal CustomUserDetails principal,
-                         @PathVariable Integer id,
+    public String detail(@PathVariable Integer id,
                          Model model,
-                         RedirectAttributes ra) {
-        if (principal == null) return "redirect:/login";
+                         RedirectAttributes ra,
+                         HttpSession session) {
+        Account acc = (Account) session.getAttribute("currentAccount");
+        if (acc == null) return "redirect:/login";
         CarRental rental = rentalService.findById(id);
         if (rental == null) {
             ra.addFlashAttribute("toastMessage", "Booking not found");
             ra.addFlashAttribute("toastType", "error");
             return "redirect:/customer/bookings";
         }
-        Customer customer = customerService.findByAccountId(principal.getAccount().getId());
+        Customer customer = customerService.findByAccountId(acc.getId());
         if (customer == null || !rental.getCustomerId().equals(customer.getId())) {
             ra.addFlashAttribute("toastMessage", "Not authorized");
             ra.addFlashAttribute("toastType", "error");
@@ -185,17 +189,18 @@ public class BookingController {
     }
 
 @PostMapping("/{id}/cancel")
-    public String cancel(@AuthenticationPrincipal CustomUserDetails principal,
-                          @PathVariable Integer id,
-                          RedirectAttributes ra) {
-        if (principal == null) return "redirect:/login";
+    public String cancel(@PathVariable Integer id,
+                          RedirectAttributes ra,
+                          HttpSession session) {
+        Account acc = (Account) session.getAttribute("currentAccount");
+        if (acc == null) return "redirect:/login";
         CarRental rental = rentalService.findById(id);
         if (rental == null) {
             ra.addFlashAttribute("toastMessage", "Booking not found");
             ra.addFlashAttribute("toastType", "error");
             return "redirect:/customer/bookings";
         }
-        Customer customer = customerService.findByAccountId(principal.getAccount().getId());
+        Customer customer = customerService.findByAccountId(acc.getId());
         if (customer == null || !rental.getCustomerId().equals(customer.getId())) {
             ra.addFlashAttribute("toastMessage", "Not authorized");
             ra.addFlashAttribute("toastType", "error");
@@ -218,12 +223,13 @@ public class BookingController {
     }
 
     @PostMapping("/{id}/review")
-    public String review(@AuthenticationPrincipal CustomUserDetails principal,
-                         @PathVariable Integer id,
-                         @RequestParam Integer stars,
-                         @RequestParam String comment,
-                         RedirectAttributes ra) {
-        if (principal == null) return "redirect:/login";
+    public String review(@PathVariable Integer id,
+                          @RequestParam Integer stars,
+                          @RequestParam String comment,
+                          RedirectAttributes ra,
+                          HttpSession session) {
+        Account acc = (Account) session.getAttribute("currentAccount");
+        if (acc == null) return "redirect:/login";
         if (stars == null || stars < 1 || stars > 5) {
             ra.addFlashAttribute("toastMessage", "Rating must be 1-5");
             ra.addFlashAttribute("toastType", "error");
@@ -235,7 +241,7 @@ public class BookingController {
                     .reviewStar(stars)
                     .comment(comment)
                     .build();
-            reviewService.create(principal.getAccount().getId(), rr);
+            reviewService.create(acc.getId(), rr);
             ra.addFlashAttribute("toastMessage", "Review submitted");
             ra.addFlashAttribute("toastType", "success");
         } catch (RuntimeException e) {

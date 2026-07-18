@@ -5,7 +5,6 @@ import com.fucar.renting.entity.Account;
 import com.fucar.renting.repository.AccountRepository;
 import com.fucar.renting.service.AccountService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -16,7 +15,6 @@ import java.util.List;
 public class AccountServiceImpl implements AccountService {
 
     private final AccountRepository accountRepository;
-    private final PasswordEncoder passwordEncoder;
 
     @Override
     public Account findByAccountName(String accountName) {
@@ -54,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Account.builder()
                 .email(request.getEmail())
                 .accountName(request.getEmail().split("@")[0])
-                .password(passwordEncoder.encode(request.getPassword()))
+                .password(request.getPassword())
                 .role("CUSTOMER")
                 .build();
         return accountRepository.save(account);
@@ -66,7 +64,7 @@ public class AccountServiceImpl implements AccountService {
         Account account = Account.builder()
                 .email(email)
                 .accountName(email.split("@")[0])
-                .password(passwordEncoder.encode(password))
+                .password(password)
                 .role("ADMIN")
                 .build();
         return accountRepository.save(account);
