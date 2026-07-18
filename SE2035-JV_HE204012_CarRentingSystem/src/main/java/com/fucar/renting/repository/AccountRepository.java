@@ -6,8 +6,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface AccountRepository extends JpaRepository<Account, Integer> {
-    @Query("SELECT a FROM Account a WHERE a.accountName = :accountName")
-    Account findByAccountName(@Param("accountName") String accountName);
+    Account findFirstByAccountNameOrderByIdAsc(String accountName);
+
+    Account findFirstByEmailOrderByIdAsc(String email);
 
     @Query("SELECT count(a) > 0 FROM Account a WHERE a.email = :email")
     boolean existsByEmail(@Param("email") String email);

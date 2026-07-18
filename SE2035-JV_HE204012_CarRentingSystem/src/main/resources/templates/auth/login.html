@@ -17,19 +17,19 @@
 
     <form th:action="@{/login}" method="post">
         <div class="field">
-            <label for="accountName">Account name</label>
-            <input type="text" id="accountName" name="accountName" placeholder="admin / customer1" required>
+            <label for="accountName">Username</label>
+            <input type="text" id="accountName" name="accountName" placeholder="admin / customer1" autocomplete="username" required>
         </div>
 
         <div class="field">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="••••••" required minlength="6">
+            <input type="password" id="password" name="password" required>
         </div>
 
         <button type="submit" class="btn-submit">Sign in</button>
 
         <div th:if="${param.error}" class="msg msg-error">
-            Invalid account name or password.
+            Invalid username or password.
         </div>
         <div th:if="${param.logout}" class="msg msg-ok">
             You have been logged out.

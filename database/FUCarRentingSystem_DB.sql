@@ -43,6 +43,7 @@ CREATE TABLE dbo.Account (
     Password     VARCHAR(200)  NOT NULL,
     Role         NVARCHAR(10)  NOT NULL,
     CONSTRAINT PK_Account PRIMARY KEY (AccountID),
+    CONSTRAINT UQ_Account_AccountName UNIQUE (AccountName),
     CONSTRAINT UQ_Account_Email UNIQUE (Email)
 );
 GO

@@ -20,6 +20,9 @@ public class RegisterServiceImpl implements RegisterService {
     @Override
     @Transactional
     public void register(CustomerRegisterRequest request) {
+        if (request.getPassword() == null || request.getPassword().isBlank()) {
+            throw new IllegalArgumentException("Password must not be empty");
+        }
         if (accountService.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
         }

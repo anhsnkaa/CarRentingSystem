@@ -43,6 +43,9 @@ public class AuthController {
         } catch (EmailAlreadyExistsException e) {
             model.addAttribute("error", "Email already registered!");
             return "auth/register";
+        } catch (IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "auth/register";
         }
         return "redirect:/login?registered";
     }

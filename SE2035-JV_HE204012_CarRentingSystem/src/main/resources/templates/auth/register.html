@@ -28,7 +28,7 @@
             </div>
             <div class="field">
                 <label>Password</label>
-                <input type="password" th:field="*{password}" placeholder="At least 6 chars" required minlength="6">
+                <input type="password" th:field="*{password}" placeholder="Your password" required>
                 <span class="err" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
             </div>
         </div>

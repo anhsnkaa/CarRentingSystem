@@ -20,12 +20,12 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account findByAccountName(String accountName) {
-        return accountRepository.findByAccountName(accountName);
+        return accountRepository.findFirstByAccountNameOrderByIdAsc(accountName);
     }
 
     @Override
     public Account findByEmail(String email) {
-        return accountRepository.findByAccountName(email);
+        return accountRepository.findFirstByEmailOrderByIdAsc(email);
     }
 
     @Override
