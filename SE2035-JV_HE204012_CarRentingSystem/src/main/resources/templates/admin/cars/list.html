@@ -43,7 +43,6 @@
             <table class="dtable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Year</th>
                         <th>Color</th>
@@ -55,7 +54,6 @@
                 </thead>
                 <tbody>
                     <tr th:each="car : ${cars}">
-                        <td class="num" th:text="${car.id}"></td>
                         <td th:text="${car.carName}"></td>
                         <td class="num" th:text="${car.carModelYear}"></td>
                         <td th:text="${car.color}"></td>
@@ -66,12 +64,20 @@
                                   th:text="${car.status}"></span>
                         </td>
                         <td class="actions">
+                            <a th:href="@{/admin/cars/{id}(id=${car.id})}" class="btn btn-sm btn-ghost">View</a>
                             <a th:href="@{/admin/cars/{id}/edit(id=${car.id})}" class="btn btn-sm btn-ghost">Edit</a>
-                            <form th:action="@{/admin/cars/{id}/delete(id=${car.id})}" method="post"
+                            <form th:if="${activeRentalCounts[car.id] == null or activeRentalCounts[car.id] == 0}"
+                                  th:action="@{/admin/cars/{id}/delete(id=${car.id})}" method="post"
                                   onsubmit="return confirm('Delete this car?');">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit" class="btn btn-sm btn-danger">Delete</button>
                             </form>
+                            <span th:if="${activeRentalCounts[car.id] != null and activeRentalCounts[car.id] > 0}"
+                                  class="btn btn-sm"
+                                  style="background:var(--paper-2); color:var(--muted); cursor:not-allowed; border:1px solid var(--line);"
+                                  title="Cannot delete: car is currently rented">
+                                In use
+                            </span>
                         </td>
                     </tr>
                 </tbody>

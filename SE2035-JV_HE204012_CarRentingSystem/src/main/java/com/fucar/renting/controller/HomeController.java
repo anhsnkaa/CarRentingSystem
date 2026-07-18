@@ -11,6 +11,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,11 +30,18 @@ public class HomeController {
             }
             return "redirect:/customer/dashboard";
         }
-        List<Car> featuredCars = carService.findTopAvailable(6);
+        List<Car> featuredCars = carService.search(null, "", 1, 6).getContent();
         List<Review> latestReviews = reviewService.findLatest(5);
+        Map<Integer, Car> reviewCarMap = reviewService.buildCarMap(latestReviews);
+        Map<Integer, com.fucar.renting.entity.Customer> reviewCustomerMap = reviewService.buildCustomerMap(latestReviews);
+        long availableCount = featuredCars.stream()
+                .filter(c -> "Available".equals(c.getStatus()))
+                .count();
         model.addAttribute("featuredCars", featuredCars);
         model.addAttribute("latestReviews", latestReviews);
-        model.addAttribute("carCount", featuredCars.size());
+        model.addAttribute("reviewCarMap", reviewCarMap);
+        model.addAttribute("reviewCustomerMap", reviewCustomerMap);
+        model.addAttribute("carCount", availableCount);
         return "home";
     }
 }

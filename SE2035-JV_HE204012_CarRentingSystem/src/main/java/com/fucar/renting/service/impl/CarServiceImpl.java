@@ -70,20 +70,20 @@ public class CarServiceImpl implements CarService {
     @Override
     @Transactional
     public void delete(Integer id) {
-        if (carRentalRepository.countByCarId(id) > 0) {
-            softDelete(id);
-        } else {
-            carRepository.deleteById(id);
+        long activeCount = carRentalRepository.countByCarIdAndStatus(id, "Active");
+        long totalCount = carRentalRepository.countByCarId(id);
+        if (activeCount > 0) {
+            throw new IllegalArgumentException("Cannot delete: this car is currently rented (Active). Mark rental as returned first.");
         }
+        if (totalCount > 0) {
+            throw new IllegalArgumentException("Cannot delete: this car has rental history. Remove or archive related records first.");
+        }
+        carRepository.deleteById(id);
     }
 
     @Override
-    @Transactional
-    public void softDelete(Integer id) {
-        Car c = carRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("Car not found: " + id));
-        c.setStatus("Unavailable");
-        carRepository.save(c);
+    public boolean hasActiveRental(Integer carId) {
+        return carRentalRepository.countByCarIdAndStatus(carId, "Active") > 0;
     }
 
     @Override

@@ -61,7 +61,7 @@
             <div class="field-row cols-3">
                 <div class="field">
                     <label>Import Date</label>
-                    <input type="date" th:field="*{importDate}" required>
+                    <input type="date" class="auto-today" th:field="*{importDate}" required>
                     <span class="err" th:errors="*{importDate}"></span>
                 </div>
                 <div class="field">
@@ -81,11 +81,9 @@
 
             <div class="field">
                 <label>Status</label>
-                <select th:field="*{status}">
-                    <option value="Available">Available</option>
-                    <option value="Rented">Rented</option>
-                    <option value="Unavailable">Unavailable</option>
-                </select>
+                <input type="text" th:field="*{status}" disabled>
+                <!-- Keep status in form submission via hidden field -->
+                <input type="hidden" th:field="*{status}">
             </div>
 
             <div class="form-actions">

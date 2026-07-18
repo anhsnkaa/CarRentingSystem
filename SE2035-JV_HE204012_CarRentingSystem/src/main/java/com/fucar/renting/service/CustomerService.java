@@ -19,6 +19,8 @@ public interface CustomerService {
 
     void delete(Integer id);
 
+    boolean hasAnyRental(Integer customerId);
+
     boolean existsByMobile(String mobile);
 
     boolean existsByIdentityCard(String identityCard);

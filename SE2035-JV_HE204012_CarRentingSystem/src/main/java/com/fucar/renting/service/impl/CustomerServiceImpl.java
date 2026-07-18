@@ -3,6 +3,7 @@ package com.fucar.renting.service.impl;
 import com.fucar.renting.dto.CustomerRegisterRequest;
 import com.fucar.renting.dto.CustomerUpdateRequest;
 import com.fucar.renting.entity.Customer;
+import com.fucar.renting.repository.CarRentalRepository;
 import com.fucar.renting.repository.CustomerRepository;
 import com.fucar.renting.service.CustomerService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import java.util.List;
 public class CustomerServiceImpl implements CustomerService {
 
     private final CustomerRepository customerRepository;
+    private final CarRentalRepository carRentalRepository;
 
     @Override
     public Customer findByAccountId(Integer accountId) {
@@ -73,7 +75,15 @@ public class CustomerServiceImpl implements CustomerService {
     @Override
     @Transactional
     public void delete(Integer id) {
+        if (hasAnyRental(id)) {
+            throw new IllegalArgumentException("Cannot delete: this customer has rental history. Mark or cancel rentals first.");
+        }
         customerRepository.deleteById(id);
+    }
+
+    @Override
+    public boolean hasAnyRental(Integer customerId) {
+        return carRentalRepository.countByCustomerId(customerId) > 0;
     }
 
     @Override

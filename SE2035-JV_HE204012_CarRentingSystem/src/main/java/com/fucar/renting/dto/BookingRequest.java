@@ -21,4 +21,12 @@ public class BookingRequest {
 
     @NotNull(message = "Return date is required")
     private LocalDate returnDate;
+
+    @AssertTrue(message = "Return date must be after pickup date")
+    public boolean isReturnAfterPickup() {
+        if (pickupDate == null || returnDate == null) {
+            return true;
+        }
+        return returnDate.isAfter(pickupDate);
+    }
 }

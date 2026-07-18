@@ -16,7 +16,7 @@ public interface CarService {
 
     void delete(Integer id);
 
-    void softDelete(Integer id);
+    boolean hasActiveRental(Integer carId);
 
     java.util.List<Car> findTopAvailable(int limit);
 }

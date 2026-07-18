@@ -17,10 +17,6 @@
     <main class="app-content narrow">
         <div class="page-head">
             <h1>My Profile</h1>
-            <div class="actions">
-                <a th:href="@{/customer/dashboard}" class="btn btn-ghost btn-sm">Dashboard</a>
-                <a th:href="@{/customer/bookings}" class="btn btn-ghost btn-sm">My Bookings</a>
-            </div>
         </div>
 
         <div th:if="${toastMessage}" th:class="${toastType == 'success' ? 'toast toast-ok' : 'toast toast-err'}"

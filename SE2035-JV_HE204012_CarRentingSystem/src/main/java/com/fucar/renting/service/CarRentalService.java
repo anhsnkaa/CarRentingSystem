@@ -13,13 +13,17 @@ public interface CarRentalService {
 
     Page<CarRental> findByCustomer(Integer customerId, Integer page, Integer size);
 
-    CarRental findById(Integer id);
+CarRental findById(Integer id);
+
+    List<CarRental> findAllByStatus(String status);
 
     List<CarRental> createRentals(Integer customerId, CarRentalRequest request);
 
-    CarRental update(Integer id, CarRentalRequest request);
-
     CarRental complete(Integer id);
+
+    CarRental approve(Integer id);
+
+    CarRental reject(Integer id);
 
     void delete(Integer id);
 }

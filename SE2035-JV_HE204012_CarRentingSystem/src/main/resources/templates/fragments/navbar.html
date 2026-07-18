@@ -7,9 +7,6 @@
         <a class="app-brand" th:href="@{/}">Car Renting</a>
 
         <div class="app-navbar-right">
-            <a th:href="@{/}"
-               sec:authorize="isAuthenticated()"
-               class="app-nav-link">Home</a>
 
             <span sec:authorize="isAuthenticated()"
                   class="app-nav-user"

@@ -31,10 +31,6 @@
                     <label>End Date</label>
                     <input type="date" th:field="*{endDate}">
                 </div>
-                <div class="field">
-                    <label>&nbsp;</label>
-                    <button type="submit" class="btn">Generate Report</button>
-                </div>
             </div>
             <div th:if="${error}" class="toast toast-err" th:text="${error}"></div>
         </form>
@@ -53,14 +49,7 @@
                     <div class="label">Avg Rental Value</div>
                     <div class="num" th:text="${#numbers.formatDecimal(avgRentalValue, 0, 'COMMA', 0, 'POINT')} + ' đ'">0 đ</div>
                 </div>
-                <div class="stat-card">
-                    <div class="label">Active · Completed · Cancelled</div>
-                    <div class="num" style="font-size:18px;">
-                        <span class="pill pill-active" th:text="${activeCount}">0</span>
-                        <span class="pill pill-ok" th:text="${completedCount}">0</span>
-                        <span class="pill pill-muted" th:text="${cancelledCount}">0</span>
-                    </div>
-                </div>
+
             </div>
 
             <div class="page-head" style="margin-top:32px;">
@@ -97,41 +86,8 @@
 
             <div class="card-empty" th:if="${#lists.isEmpty(topCars)}">No rentals in this period.</div>
 
-            <div class="page-head" style="margin-top:32px;">
-                <h2>All rentals in period</h2>
-            </div>
 
-            <div class="table-wrap" th:if="${!#lists.isEmpty(rentals)}">
-                <table class="dtable">
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Pickup</th>
-                            <th>Return</th>
-                            <th>Car</th>
-                            <th class="num">Days</th>
-                            <th class="num">Price</th>
-                            <th>Status</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="r : ${rentals}">
-                            <td class="num" th:text="${r.id}"></td>
-                            <td th:text="${r.pickupDate}"></td>
-                            <td th:text="${r.returnDate}"></td>
-                            <td th:text="${carMap[r.carId] != null ? carMap[r.carId].carName : 'Car ' + r.carId}"></td>
-                            <td class="num" th:text="${T(java.time.temporal.ChronoUnit).DAYS.between(r.pickupDate, r.returnDate)}"></td>
-                            <td class="num" th:text="${#numbers.formatDecimal(r.rentPrice, 0, 'COMMA', 0, 'POINT')} + ' đ'"></td>
-                            <td>
-                                <span th:class="${r.status == 'Active' ? 'pill pill-active' : (r.status == 'Completed' ? 'pill pill-ok' : 'pill pill-muted')}"
-                                      th:text="${r.status}"></span>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
 
-            <div class="card-empty" th:if="${#lists.isEmpty(rentals)}">No rentals in this period.</div>
         </div>
     </main>
 </div>

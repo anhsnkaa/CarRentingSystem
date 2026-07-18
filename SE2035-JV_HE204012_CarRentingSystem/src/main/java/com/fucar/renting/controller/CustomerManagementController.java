@@ -12,6 +12,9 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.util.HashMap;
+import java.util.Map;
+
 @Controller
 @RequestMapping("/admin/customers")
 @RequiredArgsConstructor
@@ -25,7 +28,12 @@ public class CustomerManagementController {
                        @RequestParam(defaultValue = "10") int size,
                        Model model) {
         Page<Customer> customers = customerService.findAll(keyword, page, size);
+        Map<Integer, Long> rentalCounts = new HashMap<>();
+        for (Customer c : customers) {
+            rentalCounts.put(c.getId(), customerService.hasAnyRental(c.getId()) ? 1L : 0L);
+        }
         model.addAttribute("customers", customers);
+        model.addAttribute("rentalCounts", rentalCounts);
         model.addAttribute("currentPage", page);
         model.addAttribute("totalPages", customers.getTotalPages());
         model.addAttribute("keyword", keyword);

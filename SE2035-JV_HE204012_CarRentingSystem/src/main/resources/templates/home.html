@@ -8,6 +8,47 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/home.css}">
+    <style>
+        .review-grid {
+            display: grid;
+            gap: 16px;
+            grid-template-columns: repeat(3, 1fr);
+        }
+        .review-card {
+            border: 1px solid var(--line);
+            border-radius: 8px;
+            padding: 20px;
+            background: var(--paper);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .review-card .review-car {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--ink);
+            margin: 0;
+        }
+        .review-card .stars {
+            color: var(--accent);
+            letter-spacing: 2px;
+            font-size: 14px;
+        }
+        .review-card .review-comment {
+            font-size: 14px;
+            color: var(--ink-2);
+            margin: 0;
+            line-height: 1.5;
+            flex: 1;
+        }
+        .review-card .review-author {
+            font-size: 13px;
+            color: var(--muted);
+            font-style: italic;
+            border-top: 1px solid var(--line-2);
+            padding-top: 10px;
+        }
+    </style>
 </head>
 <body class="home-body">
 
@@ -35,10 +76,13 @@
         </div>
 
         <div class="fleet" th:if="${!#lists.isEmpty(featuredCars)}">
-            <div class="fleet-card" th:each="c : ${featuredCars}">
+            <div class="fleet-card" th:each="c : ${featuredCars}"
+                 th:style="${c.status != 'Available' ? 'opacity:0.55;' : ''}">
                 <div style="display:flex; justify-content:space-between; align-items:start; gap:8px;">
                     <h3 th:text="${c.carName}">Car Name</h3>
-                    <span class="status" th:text="${c.status}">Available</span>
+                    <span th:class="${c.status == 'Available' ? 'status' : 'status'}"
+                          th:style="${c.status != 'Available' ? 'background:#e2e8f0; color:#475569;' : ''}"
+                          th:text="${c.status}">Available</span>
                 </div>
                 <p class="fleet-spec">
                     <span th:text="${c.carModelYear}">2024</span> ·
@@ -57,26 +101,7 @@
         </div>
 
         <div class="fleet-empty" th:if="${#lists.isEmpty(featuredCars)}">
-            No cars available yet.
-        </div>
-    </div>
-</section>
-
-<section class="stats">
-    <div class="container">
-        <div class="stats-grid">
-            <div>
-                <span class="stat-num" th:text="${carCount} + '+'">0+</span>
-                <span class="stat-label">Cars in fleet</span>
-            </div>
-            <div>
-                <span class="stat-num">24/7</span>
-                <span class="stat-label">Booking</span>
-            </div>
-            <div>
-                <span class="stat-num">3 steps</span>
-                <span class="stat-label">To drive</span>
-            </div>
+            No cars yet.
         </div>
     </div>
 </section>
@@ -88,23 +113,21 @@
             <h2>What customers say</h2>
         </div>
 
-        <div th:if="${!#lists.isEmpty(latestReviews)}">
-            <div class="reviews-feature">
-                <div class="stars"
-                     th:text="${#strings.repeat('★', latestReviews[0].reviewStar) + #strings.repeat('☆', 5 - latestReviews[0].reviewStar)}">
-                    ★★★★★
-                </div>
-                <blockquote th:text="${latestReviews[0].comment}">Latest review...</blockquote>
-                <cite>— Verified customer</cite>
-            </div>
-
-            <div class="review-row" th:each="rv,iter : ${latestReviews}"
-                 th:if="${iter.index > 0}">
+        <div class="review-grid" th:if="${!#lists.isEmpty(latestReviews)}">
+            <div class="review-card" th:each="rv : ${latestReviews}">
+                <h4 class="review-car"
+                    th:text="${reviewCarMap[rv.carRenId] != null ? reviewCarMap[rv.carRenId].carName : 'Car'}">
+                    Car Name
+                </h4>
                 <div class="stars"
                      th:text="${#strings.repeat('★', rv.reviewStar) + #strings.repeat('☆', 5 - rv.reviewStar)}">
                     ★★★★★
                 </div>
-                <p th:text="${#strings.abbreviate(rv.comment, 140)}">Comment...</p>
+                <p class="review-comment" th:text="${rv.comment}">Comment...</p>
+                <div class="review-author"
+                     th:text="${reviewCustomerMap[rv.carRenId] != null ? '— ' + reviewCustomerMap[rv.carRenId].fullName : '— Anonymous'}">
+                    — Author
+                </div>
             </div>
         </div>
 
@@ -113,54 +136,6 @@
         </div>
     </div>
 </section>
-
-<section class="section how">
-    <div class="container">
-        <div class="section-head">
-            <p class="label">How it works</p>
-            <h2>Three steps</h2>
-        </div>
-
-        <div class="how-steps">
-            <div class="how-step">
-                <span class="num">01</span>
-                <h4>Register</h4>
-                <p>Create an account with email and password.</p>
-            </div>
-            <div class="how-step">
-                <span class="num">02</span>
-                <h4>Browse</h4>
-                <p>Pick a car from the fleet.</p>
-            </div>
-            <div class="how-step">
-                <span class="num">03</span>
-                <h4>Book</h4>
-                <p>Confirm dates and drive.</p>
-            </div>
-        </div>
-    </div>
-</section>
-
-<section class="cta">
-    <div class="container">
-        <h3>Ready to drive?</h3>
-        <p>Sign in to book a car.</p>
-        <a th:href="@{/login}" class="btn">Sign in</a>
-    </div>
-</section>
-
-<footer class="footer">
-    <div class="container">
-        <div class="footer-inner">
-            <span>&copy; 2026 FU Car Renting</span>
-            <nav class="footer-nav">
-                <a th:href="@{/}">Home</a>
-                <a th:href="@{/login}">Sign in</a>
-                <a th:href="@{/register}">Register</a>
-            </nav>
-        </div>
-    </div>
-</footer>
 
 <th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
 </body>

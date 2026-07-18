@@ -21,25 +21,49 @@
             <h1>Rental #<span th:text="${rental.id}">0</span></h1>
             <div class="actions">
                 <a th:href="@{/admin/rentals}" class="btn btn-ghost btn-sm">← Back</a>
-                <a th:href="@{/admin/rentals/{id}/edit(id=${rental.id})}" class="btn btn-sm">Edit</a>
-                <form th:if="${rental.status == 'Active'}"
-                      th:action="@{/admin/rentals/{id}/complete(id=${rental.id})}" method="post"
-                      onsubmit="return confirm('Mark this rental as completed?');">
+
+                <form th:if="${rental.status == 'Pending'}"
+                      th:action="@{/admin/rentals/{id}/approve(id=${rental.id})}" method="post" style="display:inline;">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="btn btn-success btn-sm">Mark Completed</button>
+                    <button type="submit" class="btn btn-sm"
+                            onclick="return confirm('Approve this rental request?');">Approve</button>
+                </form>
+                <form th:if="${rental.status == 'Pending'}"
+                      th:action="@{/admin/rentals/{id}/reject(id=${rental.id})}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-sm btn-danger"
+                            onclick="return confirm('Reject this rental request?');">Reject</button>
+                </form>
+
+                <form th:if="${rental.status == 'Active'}"
+                      th:action="@{/admin/rentals/{id}/complete(id=${rental.id})}" method="post" style="display:inline;">
+                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                    <button type="submit" class="btn btn-sm btn-success"
+                            onclick="return confirm('Confirm car returned? Car will be marked Available.');">Mark Returned</button>
                 </form>
             </div>
         </div>
 
         <div class="detail-card">
             <div class="detail-row">
-                <dt>Customer ID</dt>
-                <dd th:text="${rental.customerId}"></dd>
+                <dt>Customer</dt>
+                <dd>
+                    <span th:text="${customer != null ? customer.fullName : 'Customer #' + rental.customerId}">Customer</span>
+                    <span class="sub" style="margin-left:8px;" th:if="${customer != null}">
+                        · <span th:text="${customer.mobile}">Mobile</span> ·
+                        <span th:text="${customer.identityCard}">Identity</span>
+                    </span>
+                </dd>
             </div>
             <div class="detail-row">
                 <dt>Car</dt>
                 <dd>
-                    <span th:text="${car != null ? car.carName : 'Car ' + rental.carId}"></span>
+                    <span th:text="${car != null ? car.carName : 'Car #' + rental.carId}">Car</span>
+                    <span class="sub" style="margin-left:8px;" th:if="${car != null and producer != null}">
+                        · <span th:text="${producer.producerName}">Producer</span> ·
+                        <span th:text="${car.carModelYear}">Year</span> ·
+                        <span th:text="${car.color}">Color</span>
+                    </span>
                 </dd>
             </div>
             <div class="detail-row">
@@ -57,7 +81,9 @@
             <div class="detail-row">
                 <dt>Status</dt>
                 <dd>
-                    <span th:class="${rental.status == 'Active' ? 'pill pill-active' : (rental.status == 'Completed' ? 'pill pill-ok' : 'pill pill-muted')}"
+                    <span th:class="${rental.status == 'Pending' ? 'pill pill-pending' :
+                                     (rental.status == 'Active' ? 'pill pill-active' :
+                                     (rental.status == 'Completed' ? 'pill pill-ok' : 'pill pill-cancel'))}"
                           th:text="${rental.status}"></span>
                 </dd>
             </div>

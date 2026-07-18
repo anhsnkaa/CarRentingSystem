@@ -41,14 +41,7 @@
                 <div class="num" style="font-size:18px;">View history</div>
                 <span class="link">Open →</span>
             </a>
-            <div class="stat-card">
-                <div class="label">Quick action</div>
-                <div class="num" style="font-size:18px;">Sign out</div>
-                <form th:action="@{/logout}" method="post" style="margin-top:8px;">
-                    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                    <button type="submit" class="link" style="background:none; border:none; cursor:pointer; padding:0; font-size:13px; color:var(--accent);">Logout →</button>
-                </form>
-            </div>
+
         </div>
     </main>
 </div>

@@ -31,7 +31,6 @@
             <table class="dtable">
                 <thead>
                     <tr>
-                        <th>ID</th>
                         <th>Name</th>
                         <th>Address</th>
                         <th>Country</th>
@@ -40,7 +39,6 @@
                 </thead>
                 <tbody>
                     <tr th:each="p : ${producers}">
-                        <td class="num" th:text="${p.id}"></td>
                         <td th:text="${p.producerName}"></td>
                         <td th:text="${p.address}"></td>
                         <td th:text="${p.country}"></td>

@@ -39,12 +39,19 @@ public class ReportController {
                          BindingResult binding,
                          Model model) {
         if (binding.hasErrors() || request.getStartDate() == null || request.getEndDate() == null) {
+            LocalDate defaultStart = LocalDate.now().minusYears(1);
+            LocalDate defaultEnd = LocalDate.now();
             model.addAttribute("reportRequest",
                     ReportRequest.builder()
-                            .startDate(LocalDate.now().minusMonths(1))
-                            .endDate(LocalDate.now())
+                            .startDate(defaultStart)
+                            .endDate(defaultEnd)
                             .build());
             model.addAttribute("activeMenu", "reports");
+            List<CarRental> rentals = carRentalRepository.findInPeriod(defaultStart, defaultEnd);
+            populateStats(model, rentals, ReportRequest.builder()
+                    .startDate(defaultStart)
+                    .endDate(defaultEnd)
+                    .build());
             return "admin/reports/by-date";
         }
 
@@ -57,7 +64,11 @@ public class ReportController {
 
         List<CarRental> rentals = carRentalRepository.findInPeriod(
                 request.getStartDate(), request.getEndDate());
+        populateStats(model, rentals, request);
+        return "admin/reports/by-date";
+    }
 
+    private void populateStats(Model model, List<CarRental> rentals, ReportRequest request) {
         Map<Integer, Car> carMap = new HashMap<>();
         for (CarRental r : rentals) {
             Integer carId = r.getCarId();
@@ -122,6 +133,5 @@ public class ReportController {
         model.addAttribute("topCars", topCars);
         model.addAttribute("reportRequest", request);
         model.addAttribute("activeMenu", "reports");
-        return "admin/reports/by-date";
     }
 }

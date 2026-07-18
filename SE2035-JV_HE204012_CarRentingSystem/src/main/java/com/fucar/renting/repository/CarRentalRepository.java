@@ -14,6 +14,8 @@ public interface CarRentalRepository extends JpaRepository<CarRental, Integer> {
 
     Page<CarRental> findByCustomerId(Integer customerId, Pageable pageable);
 
+    long countByCustomerId(Integer customerId);
+
     @Query("SELECT r FROM CarRental r WHERE " +
             "(:status IS NULL OR :status = '' OR r.status = :status) " +
             "AND (:from IS NULL OR r.pickupDate >= :from) " +
@@ -31,4 +33,14 @@ public interface CarRentalRepository extends JpaRepository<CarRental, Integer> {
 
     @Query("SELECT COUNT(r) FROM CarRental r WHERE r.carId = :carId")
     long countByCarId(@Param("carId") Integer carId);
+
+    long countByCarIdAndStatus(Integer carId, String status);
+
+    long countByCustomerIdAndCarIdAndStatusIn(Integer customerId, Integer carId, java.util.Collection<String> statuses);
+
+    List<CarRental> findByCustomerIdAndStatusIn(Integer customerId, java.util.Collection<String> statuses);
+
+    List<CarRental> findByCarIdOrderByPickupDateDesc(Integer carId);
+
+    List<CarRental> findAllByStatusOrderByIdDesc(String status);
 }
