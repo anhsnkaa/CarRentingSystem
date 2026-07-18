@@ -1,109 +1,84 @@
 :root {
-    --bg: #ffffff;
+    --paper:   #ffffff;
     --surface: #f8f9fa;
-    --border: #e5e7eb;
-    --text: #1f2937;
-    --muted: #6b7280;
+    --border:  #e5e7eb;
+    --text:    #1f2937;
+    --muted:   #6b7280;
     --primary: #2563eb;
-    --primary-hover: #1d4ed8;
     --navbar-bg: #212529;
+
+    --font: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
 }
 
 body {
-    background: var(--bg);
+    background: var(--paper);
     color: var(--text);
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    font-family: var(--font);
 }
 
-.card,
-.shadow,
-.shadow-sm {
-    box-shadow: none !important;
+/* ---------- NAVBAR (shared by all pages) ---------- */
+.app-navbar {
+    background: var(--navbar-bg);
+    color: #ffffff;
 }
 
-.navbar,
-nav.navbar {
-    background-color: var(--navbar-bg) !important;
-    color: #ffffff !important;
+.app-navbar-inner {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 32px;
 }
 
-.navbar *,
-.navbar .nav-link,
-.navbar a,
-.navbar span,
-.navbar button {
-    color: #ffffff !important;
+.app-brand {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 16px;
+    letter-spacing: 0.3px;
 }
 
-.navbar .btn-outline-light,
-.navbar button.btn {
-    color: #ffffff !important;
-    border-color: #ffffff !important;
-    background: transparent !important;
+.app-brand:hover {
+    color: #ffffff;
 }
 
-.navbar .btn-outline-light:hover,
-.navbar button.btn:hover {
-    background: rgba(255, 255, 255, 0.1) !important;
-    color: #ffffff !important;
-}
-
-.navbar-brand {
-    letter-spacing: 0.5px;
-    color: #ffffff !important;
-}
-
-.navbar .btn-outline-light {
-    font-size: 13px;
-    padding: 4px 12px;
-}
-
-.btn {
-    border-radius: 4px;
-    padding: 8px 16px;
-    transition: background-color 0.15s, border-color 0.15s;
-}
-
-.btn-primary {
-    background-color: var(--primary);
-    border-color: var(--primary);
-}
-
-.btn-primary:hover {
-    background-color: var(--primary-hover) !important;
-    border-color: var(--primary-hover) !important;
-    transform: none !important;
-}
-
-.form-control,
-.input-group-text {
-    border-color: var(--border);
-}
-
-.form-control:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.15);
-}
-
-.alert {
-    border-radius: 4px;
-}
-
-.auth-body {
-    min-height: 100vh;
+.app-navbar-right {
     display: flex;
     align-items: center;
-    justify-content: center;
-    background: linear-gradient(135deg, #f0f4ff 0%, #fafbff 100%);
-    padding: 24px;
+    gap: 16px;
 }
 
-.auth-card {
-    width: 100%;
-    max-width: 420px;
-    background: #ffffff;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 32px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+.app-nav-link {
+    color: #ffffff;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+.app-nav-link:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.app-nav-user {
+    color: #ffffff;
+    font-size: 14px;
+    opacity: 0.9;
+}
+
+.app-nav-form {
+    margin: 0;
+}
+
+.app-nav-logout {
+    background: transparent;
+    color: #ffffff;
+    border: 1px solid #ffffff;
+    border-radius: 4px;
+    padding: 4px 12px;
+    font-family: inherit;
+    font-size: 13px;
+    cursor: pointer;
+}
+
+.app-nav-logout:hover {
+    background: rgba(255, 255, 255, 0.12);
 }

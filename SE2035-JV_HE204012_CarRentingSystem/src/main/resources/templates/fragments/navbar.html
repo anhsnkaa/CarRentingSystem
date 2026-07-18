@@ -2,25 +2,23 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6">
 <body>
-<nav th:fragment="navbar" class="navbar navbar-expand-lg" style="background-color: #212529 !important; color: #fff !important;">
-    <div class="container-fluid">
-        <a class="navbar-brand fw-bold" th:href="@{/}" style="color: #fff !important;">Car Renting</a>
-        <div class="d-flex align-items-center">
+<nav th:fragment="navbar" class="app-navbar">
+    <div class="app-navbar-inner">
+        <a class="app-brand" th:href="@{/}">Car Renting</a>
+
+        <div class="app-navbar-right">
             <a th:href="@{/}"
                sec:authorize="isAuthenticated()"
-               class="me-3 small text-decoration-none"
-               style="color: #fff !important;">
-                <i class="bi bi-house"></i> Home
-            </a>
+               class="app-nav-link">Home</a>
+
             <span sec:authorize="isAuthenticated()"
-                  class="me-3 small"
-                  style="color: #fff !important;"
+                  class="app-nav-user"
                   th:text="${account != null ? account.account.accountName : 'Guest'}">Guest</span>
-            <form th:action="@{/logout}" method="post" class="m-0"
+
+            <form th:action="@{/logout}" method="post" class="app-nav-form"
                   sec:authorize="isAuthenticated()">
                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                <button type="submit" class="btn btn-sm"
-                        style="color: #fff; border-color: #fff; background: transparent;">Logout</button>
+                <button type="submit" class="app-nav-logout">Logout</button>
             </form>
         </div>
     </div>

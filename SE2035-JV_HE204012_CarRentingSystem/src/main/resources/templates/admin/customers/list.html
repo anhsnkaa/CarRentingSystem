@@ -3,93 +3,87 @@
 <head>
     <meta charset="UTF-8">
     <title>Customers</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" th:href="@{/css/common.css}">
     <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
 </head>
 <body>
+
 <nav th:replace="~{fragments/navbar :: navbar}"></nav>
 
-<div class="admin-layout">
+<div class="app-layout">
     <div th:replace="~{fragments/sidebar :: sidebar(activeMenu='customers')}"></div>
 
-    <main class="admin-content">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1 class="mb-0">Customers</h1>
+    <main class="app-content">
+        <div class="page-head">
+            <h1>Customers</h1>
         </div>
 
-        <div th:if="${toastMessage}" class="alert alert-dismissible fade show"
-             th:classappend="${toastType == 'success' ? 'alert-success' : 'alert-danger'}">
-            <span th:text="${toastMessage}"></span>
-            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
-        </div>
+        <div th:if="${toastMessage}" th:class="${toastType == 'success' ? 'toast toast-ok' : 'toast toast-err'}"
+             th:text="${toastMessage}"></div>
 
-        <form method="get" class="row mb-3 g-2">
-            <div class="col-md-6">
-                <input type="text" name="keyword" class="form-control" placeholder="Search name, mobile, identity..."
-                       th:value="${keyword}">
-            </div>
-            <div class="col-md-2">
-                <button type="submit" class="btn btn-secondary w-100">Search</button>
-            </div>
+        <form method="get" class="filter-bar">
+            <input type="text" name="keyword" placeholder="Search name, mobile, identity..." th:value="${keyword}">
+            <span></span>
+            <span></span>
+            <button type="submit" class="btn btn-ghost">Search</button>
         </form>
 
-        <div class="card border">
-            <table class="table table-borderless mb-0">
-                <thead class="table-light">
-                <tr>
-                    <th>ID</th>
-                    <th>Full Name</th>
-                    <th>Mobile</th>
-                    <th>Identity Card</th>
-                    <th>Licence #</th>
-                    <th>Birthday</th>
-                    <th class="text-end">Actions</th>
-                </tr>
+        <div class="table-wrap" th:if="${customers.totalElements > 0}">
+            <table class="dtable">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Full Name</th>
+                        <th>Mobile</th>
+                        <th>Identity</th>
+                        <th>Licence</th>
+                        <th>Birthday</th>
+                        <th class="actions">Actions</th>
+                    </tr>
                 </thead>
                 <tbody>
-                <tr th:if="${customers.totalElements == 0}">
-                    <td colspan="7" class="text-center text-muted py-4">No customers found</td>
-                </tr>
-                <tr th:each="c : ${customers}">
-                    <td th:text="${c.id}"></td>
-                    <td th:text="${c.fullName}"></td>
-                    <td th:text="${c.mobile}"></td>
-                    <td th:text="${c.identityCard}"></td>
-                    <td th:text="${c.licenceNumber}"></td>
-                    <td th:text="${c.birthday}"></td>
-                    <td class="text-end">
-                        <a th:href="@{/admin/customers/{id}/edit(id=${c.id})}" class="btn btn-sm btn-outline-primary">Edit</a>
-                        <form th:action="@{/admin/customers/{id}/delete(id=${c.id})}" method="post" class="d-inline"
-                              onsubmit="return confirm('Delete this customer?');">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Delete</button>
-                        </form>
-                    </td>
-                </tr>
+                    <tr th:each="c : ${customers}">
+                        <td class="num" th:text="${c.id}"></td>
+                        <td th:text="${c.fullName}"></td>
+                        <td th:text="${c.mobile}"></td>
+                        <td th:text="${c.identityCard}"></td>
+                        <td th:text="${c.licenceNumber}"></td>
+                        <td th:text="${c.birthday}"></td>
+                        <td class="actions">
+                            <a th:href="@{/admin/customers/{id}/edit(id=${c.id})}" class="btn btn-sm btn-ghost">Edit</a>
+                            <form th:action="@{/admin/customers/{id}/delete(id=${c.id})}" method="post"
+                                  onsubmit="return confirm('Delete this customer?');">
+                                <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                <button type="submit" class="btn btn-sm btn-danger">Delete</button>
+                            </form>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-3" th:if="${totalPages > 1}">
-            <small class="text-muted">
-                Page <span th:text="${currentPage}">1</span> of <span th:text="${totalPages}">1</span>
-                | Total: <span th:text="${customers.totalElements}">0</span> customer(s)
-            </small>
-            <nav>
-                <ul class="pagination pagination-sm mb-0">
-                    <li class="page-item" th:classappend="${currentPage == 1 ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/admin/customers(keyword=${keyword}, page=${currentPage - 1})}">Previous</a>
-                    </li>
-                    <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
-                        th:classappend="${currentPage == i ? 'active' : ''}">
-                        <a class="page-link" th:href="@{/admin/customers(keyword=${keyword}, page=${i})}" th:text="${i}"></a>
-                    </li>
-                    <li class="page-item" th:classappend="${currentPage == totalPages ? 'disabled' : ''}">
-                        <a class="page-link" th:href="@{/admin/customers(keyword=${keyword}, page=${currentPage + 1})}">Next</a>
-                    </li>
-                </ul>
-            </nav>
+        <div class="card-empty" th:if="${customers.totalElements == 0}">No customers found.</div>
+
+        <div class="pager" th:if="${totalPages > 0}">
+            <span class="info">
+                Page <span th:text="${currentPage}">1</span> / <span th:text="${totalPages}">1</span>
+                · Total: <span th:text="${customers.totalElements}">0</span>
+            </span>
+            <div class="pages">
+                <a th:class="${currentPage == 1 ? 'disabled' : ''}"
+                   th:href="@{/admin/customers(keyword=${keyword}, page=${currentPage - 1})}">Prev</a>
+                <span th:each="i : ${#numbers.sequence(1, totalPages)}"
+                      th:class="${currentPage == i ? 'current' : ''}">
+                    <a th:if="${currentPage != i}"
+                       th:href="@{/admin/customers(keyword=${keyword}, page=${i})}" th:text="${i}"></a>
+                    <span th:if="${currentPage == i}" th:text="${i}"></span>
+                </span>
+                <a th:class="${currentPage == totalPages ? 'disabled' : ''}"
+                   th:href="@{/admin/customers(keyword=${keyword}, page=${currentPage + 1})}">Next</a>
+            </div>
         </div>
     </main>
 </div>
