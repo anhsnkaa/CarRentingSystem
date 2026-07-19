@@ -92,8 +92,8 @@
                 </thead>
                 <tbody>
                     <tr th:each="r : ${rentals}">
-                        <td th:text="${customerMap[r.customerId] != null ? customerMap[r.customerId].fullName : 'Customer #' + r.customerId}">Customer</td>
-                        <td th:text="${carMap[r.carId] != null ? carMap[r.carId].carName : 'Car #' + r.carId}">Car</td>
+                        <td th:text="${customerMap[r.customerId] != null ? customerMap[r.customerId].fullName : 'Unknown'}">Customer</td>
+                        <td th:text="${carMap[r.carId] != null ? carMap[r.carId].carName : 'Unknown'}">Car</td>
                         <td>
                             <span th:text="${r.pickupDate}">2026-01-01</span>
                             <span style="color:var(--muted); margin:0 6px;">→</span>

@@ -42,7 +42,9 @@
                 </div>
                 <div class="field">
                     <label>Birthday</label>
-                    <input type="date" th:field="*{birthday}" required>
+                    <input type="date" name="birthday" id="birthday"
+                           th:value="${customerRequest.birthday != null} ? ${#temporals.format(customerRequest.birthday, 'yyyy-MM-dd')} : ''"
+                           required>
                     <span class="err" th:errors="*{birthday}"></span>
                 </div>
             </div>
@@ -62,7 +64,9 @@
 
             <div class="field">
                 <label>Licence Date</label>
-                <input type="date" th:field="*{licenceDate}" required>
+                <input type="date" name="licenceDate" id="licenceDate"
+                       th:value="${customerRequest.licenceDate != null} ? ${#temporals.format(customerRequest.licenceDate, 'yyyy-MM-dd')} : ''"
+                       required>
                 <span class="err" th:errors="*{licenceDate}"></span>
             </div>
 

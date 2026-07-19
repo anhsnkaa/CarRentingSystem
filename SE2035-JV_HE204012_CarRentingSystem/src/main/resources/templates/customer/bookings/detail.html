@@ -16,7 +16,7 @@
 <div class="app-layout">
     <main class="app-content">
         <div class="page-head">
-            <h1>Booking #<span th:text="${rental.id}">0</span></h1>
+            <h1>Booking Detail</h1>
             <div class="actions">
                 <a th:href="@{/customer/bookings}" class="btn btn-ghost btn-sm">← Back</a>
                 <form th:if="${rental.status == 'Pending'}"

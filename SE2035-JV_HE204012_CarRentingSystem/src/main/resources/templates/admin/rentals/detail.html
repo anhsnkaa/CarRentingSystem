@@ -18,7 +18,7 @@
 
     <main class="app-content">
         <div class="page-head">
-            <h1>Rental #<span th:text="${rental.id}">0</span></h1>
+            <h1>Rental Detail</h1>
             <div class="actions">
                 <a th:href="@{/admin/rentals}" class="btn btn-ghost btn-sm">← Back</a>
 
@@ -55,7 +55,7 @@
             <div class="detail-row">
                 <dt>Customer</dt>
                 <dd>
-                    <span th:text="${customer != null ? customer.fullName : 'Customer #' + rental.customerId}">Customer</span>
+                    <span th:text="${customer != null ? customer.fullName : 'Unknown'}">Customer</span>
                     <span class="sub" style="margin-left:8px;" th:if="${customer != null}">
                         · <span th:text="${customer.mobile}">Mobile</span> ·
                         <span th:text="${customer.identityCard}">Identity</span>
@@ -65,7 +65,7 @@
             <div class="detail-row">
                 <dt>Car</dt>
                 <dd>
-                    <span th:text="${car != null ? car.carName : 'Car #' + rental.carId}">Car</span>
+                    <span th:text="${car != null ? car.carName : 'Unknown'}">Car</span>
                     <span class="sub" style="margin-left:8px;" th:if="${car != null and producer != null}">
                         · <span th:text="${producer.producerName}">Producer</span> ·
                         <span th:text="${car.carModelYear}">Year</span> ·

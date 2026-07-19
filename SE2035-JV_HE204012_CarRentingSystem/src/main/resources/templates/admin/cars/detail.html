@@ -103,11 +103,11 @@
                             ★★★★★
                         </div>
                         <strong style="font-size:13px; color:var(--ink);"
-                                th:text="${reviewCustomerMap[rv.carRenId] != null ? reviewCustomerMap[rv.carRenId].fullName : 'Customer #' + rv.carRenId}">
+                                th:text="${reviewCustomerMap[rv.carRenId] != null ? reviewCustomerMap[rv.carRenId].fullName : 'Anonymous'}">
                             Customer Name
                         </strong>
                     </div>
-                    <span class="sub" style="font-size:12px;">Rental #<span th:text="${rv.carRenId}">0</span></span>
+                    <span class="sub" style="font-size:12px;">Verified Review</span>
                 </div>
                 <p style="margin:0; color:var(--ink-2); font-size:14px;" th:text="${rv.comment}">Comment</p>
             </div>
