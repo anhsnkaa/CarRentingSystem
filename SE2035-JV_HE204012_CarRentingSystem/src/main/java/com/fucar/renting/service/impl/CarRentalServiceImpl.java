@@ -84,8 +84,6 @@ public class CarRentalServiceImpl implements CarRentalService {
                     .status(status)
                     .build();
             saved.add(carRentalRepository.save(r));
-            car.setStatus("Unavailable");
-            carRepository.save(car);
         }
         return saved;
     }
@@ -101,7 +99,7 @@ public class CarRentalServiceImpl implements CarRentalService {
         Car car = carRepository.findById(r.getCarId()).orElseThrow(
                 () -> new RuntimeException("Car not found: " + r.getCarId()));
         if (!"Available".equals(car.getStatus())) {
-            throw new IllegalArgumentException("Car '" + car.getCarName() + "' is no longer available (someone else booked it first). Cannot approve this request.");
+            throw new IllegalArgumentException("Cannot approve: car '" + car.getCarName() + "' has already been booked by another customer. Please reject this request instead.");
         }
         r.setStatus("Active");
         CarRental saved = carRentalRepository.save(r);
@@ -121,7 +119,7 @@ public class CarRentalServiceImpl implements CarRentalService {
         r.setStatus("Cancelled");
         CarRental saved = carRentalRepository.save(r);
         Car car = carRepository.findById(r.getCarId()).orElse(null);
-        if (car != null && "Unavailable".equals(car.getStatus())) {
+        if (car != null && "Rented".equals(car.getStatus())) {
             car.setStatus("Available");
             carRepository.save(car);
         }

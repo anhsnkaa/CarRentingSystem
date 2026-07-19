@@ -109,7 +109,7 @@
                         <td class="actions">
                             <a th:href="@{/admin/rentals/{id}(id=${r.id})}" class="btn btn-sm btn-ghost">View</a>
 
-                            <form th:if="${r.status == 'Pending'}"
+                            <form th:if="${r.status == 'Pending' and (carMap[r.carId] == null or carMap[r.carId].status == 'Available')}"
                                   th:action="@{/admin/rentals/{id}/approve(id=${r.id})}" method="post">
                                 <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                                 <button type="submit" class="btn btn-sm"

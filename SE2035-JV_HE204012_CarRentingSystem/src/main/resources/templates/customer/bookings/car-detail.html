@@ -52,7 +52,10 @@
             </div>
             <div class="detail-row">
                 <dt>Status</dt>
-                <dd><span class="pill pill-ok" th:text="${car.status}">Available</span></dd>
+                <dd>
+                    <span th:class="${car.status == 'Available' ? 'pill pill-ok' : (car.status == 'Rented' ? 'pill pill-bad' : 'pill pill-warn')}"
+                          th:text="${car.status}">Available</span>
+                </dd>
             </div>
             <div class="detail-row">
                 <dt>Description</dt>
@@ -64,20 +67,26 @@
             <h2>Book this car</h2>
         </div>
 
-        <form th:action="@{/customer/bookings}" th:object="${bookingRequest}" method="post" class="form-card">
+        <div th:if="${!canBook}" class="card-empty" style="border-left:4px solid var(--danger);">
+            <strong th:if="${car.status == 'Rented'}">This car is currently rented.</strong>
+            <strong th:unless="${car.status == 'Rented'}">This car is not available for booking right now.</strong>
+
+        </div>
+
+        <form th:if="${canBook}" th:action="@{/customer/bookings}" th:object="${bookingRequest}" method="post" class="form-card">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="hidden" th:field="*{carIds}"/>
+            <input type="hidden" name="carIds" th:value="${car.id}"/>
             <input type="hidden" name="carId" th:value="${car.id}"/>
 
             <div class="field-row cols-2">
                 <div class="field">
                     <label>Pickup Date</label>
-                    <input type="date" class="auto-today min-today" th:field="*{pickupDate}" required>
+                    <input type="date" id="pickupDate" class="auto-today min-today" th:field="*{pickupDate}" required>
                     <span class="err" th:errors="*{pickupDate}"></span>
                 </div>
                 <div class="field">
                     <label>Return Date</label>
-                    <input type="date" class="auto-today" th:field="*{returnDate}" required>
+                    <input type="date" id="returnDate" class="auto-today return-after-pickup" th:field="*{returnDate}" required>
                     <span class="err" th:errors="*{returnDate}"></span>
                     <span class="err" th:errors="*{returnAfterPickup}"></span>
                 </div>
@@ -122,5 +131,34 @@
 </div>
 
 <th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+<script>
+    (function () {
+        var pickup = document.getElementById('pickupDate');
+        var ret = document.getElementById('returnDate');
+        if (!pickup || !ret) return;
+
+        function pad(n) { return n < 10 ? '0' + n : '' + n; }
+        function addOneDay(dateStr) {
+            if (!dateStr) return null;
+            var d = new Date(dateStr + 'T00:00:00');
+            d.setDate(d.getDate() + 1);
+            return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
+        }
+
+        function syncReturnMin() {
+            var next = addOneDay(pickup.value);
+            if (next) {
+                ret.min = next;
+                if (ret.value && ret.value <= pickup.value) {
+                    ret.value = next;
+                }
+            }
+        }
+
+        pickup.addEventListener('change', syncReturnMin);
+        pickup.addEventListener('input', syncReturnMin);
+        syncReturnMin();
+    })();
+</script>
 </body>
 </html>

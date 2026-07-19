@@ -104,6 +104,7 @@ public class BookingController {
         model.addAttribute("avgRating", avgRating);
         model.addAttribute("reviewCount", reviews.size());
         model.addAttribute("bookingRequest", bookingRequest);
+        model.addAttribute("canBook", "Available".equals(car.getStatus()));
         model.addAttribute("activeMenu", "bookings");
         return "customer/bookings/car-detail";
     }
@@ -124,7 +125,17 @@ public class BookingController {
             return "redirect:/customer/profile";
         }
         if (binding.hasErrors()) {
-            ra.addFlashAttribute("toastMessage", "Please fix the errors in the booking form.");
+            String detail = binding.getAllErrors().stream()
+                    .map(err -> {
+                        if (err instanceof org.springframework.validation.FieldError fe) {
+                            return fe.getField() + ": " + fe.getDefaultMessage();
+                        }
+                        return err.getDefaultMessage();
+                    })
+                    .filter(s -> s != null && !s.isBlank())
+                    .reduce((a, b) -> a + "; " + b)
+                    .orElse("Please fix the errors in the booking form.");
+            ra.addFlashAttribute("toastMessage", detail);
             ra.addFlashAttribute("toastType", "error");
             if (carId != null) {
                 return "redirect:/customer/bookings/cars/" + carId;
@@ -214,7 +225,7 @@ public class BookingController {
         Integer carId = rental.getCarId();
         rentalService.delete(id);
         Car car = carService.findById(carId);
-        if (car != null && "Unavailable".equals(car.getStatus())) {
+        if (car != null && "Rented".equals(car.getStatus())) {
             car.setStatus("Available");
         }
         ra.addFlashAttribute("toastMessage", "Request cancelled. Car is still available.");

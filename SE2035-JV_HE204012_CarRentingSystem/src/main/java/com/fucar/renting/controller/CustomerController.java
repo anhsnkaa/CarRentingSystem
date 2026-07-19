@@ -41,6 +41,57 @@ public class CustomerController {
         return "customer/profile";
     }
 
+    @GetMapping("/profile/new")
+    public String newProfileForm(HttpSession session, Model model) {
+        Account account = (Account) session.getAttribute("currentAccount");
+        if (account == null) return "redirect:/login";
+        Customer customer = customerService.findByAccountId(account.getId());
+        if (customer != null) {
+            return "redirect:/customer/profile";
+        }
+        model.addAttribute("customerRequest", CustomerUpdateRequest.builder().build());
+        model.addAttribute("activeMenu", "profile");
+        model.addAttribute("isNew", true);
+        return "customer/profile";
+    }
+
+    @PostMapping("/profile/new")
+    public String createProfile(@Valid @ModelAttribute("customerRequest") CustomerUpdateRequest request,
+                                BindingResult binding,
+                                Model model,
+                                RedirectAttributes ra,
+                                HttpSession session) {
+        Account account = (Account) session.getAttribute("currentAccount");
+        if (account == null) return "redirect:/login";
+        Customer customer = customerService.findByAccountId(account.getId());
+        if (customer != null) {
+            return "redirect:/customer/profile";
+        }
+        if (binding.hasErrors()) {
+            model.addAttribute("activeMenu", "profile");
+            model.addAttribute("isNew", true);
+            return "customer/profile";
+        }
+        try {
+            com.fucar.renting.dto.CustomerRegisterRequest reg = com.fucar.renting.dto.CustomerRegisterRequest.builder()
+                    .fullName(request.getFullName())
+                    .mobile(request.getMobile())
+                    .birthday(request.getBirthday())
+                    .identityCard(request.getIdentityCard())
+                    .licenceNumber(request.getLicenceNumber())
+                    .licenceDate(request.getLicenceDate())
+                    .build();
+            customerService.createForAccount(account.getId(), reg);
+            ra.addFlashAttribute("toastMessage", "Profile created");
+            ra.addFlashAttribute("toastType", "success");
+        } catch (Exception e) {
+            ra.addFlashAttribute("toastMessage", "Create failed: " + e.getMessage());
+            ra.addFlashAttribute("toastType", "error");
+            return "redirect:/customer/profile/new";
+        }
+        return "redirect:/customer/profile";
+    }
+
     @PostMapping("/profile")
     public String updateProfile(@Valid @ModelAttribute("customerRequest") CustomerUpdateRequest request,
                                 BindingResult binding,

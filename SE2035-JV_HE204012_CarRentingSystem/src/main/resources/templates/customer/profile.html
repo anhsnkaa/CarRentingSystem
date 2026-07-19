@@ -16,18 +16,19 @@
 <div class="app-layout">
     <main class="app-content narrow">
         <div class="page-head">
-            <h1>My Profile</h1>
+            <h1 th:text="${isNew} ? 'Create Your Profile' : 'My Profile'">My Profile</h1>
         </div>
 
         <div th:if="${toastMessage}" th:class="${toastType == 'success' ? 'toast toast-ok' : 'toast toast-err'}"
              th:text="${toastMessage}"></div>
 
-        <form th:action="@{/customer/profile}" th:object="${customerRequest}" method="post" class="form-card">
+        <form th:action="${isNew} ? @{/customer/profile/new} : @{/customer/profile}"
+              th:object="${customerRequest}" method="post" class="form-card">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
             <div class="field">
                 <label>Email (username)</label>
-                <input type="text" th:value="${account.account.email}" disabled>
+                <input type="text" th:value="${account.email}" disabled>
             </div>
 
             <div class="field">

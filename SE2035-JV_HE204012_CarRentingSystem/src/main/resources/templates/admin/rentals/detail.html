@@ -22,7 +22,7 @@
             <div class="actions">
                 <a th:href="@{/admin/rentals}" class="btn btn-ghost btn-sm">← Back</a>
 
-                <form th:if="${rental.status == 'Pending'}"
+                <form th:if="${rental.status == 'Pending' and (car == null or car.status == 'Available')}"
                       th:action="@{/admin/rentals/{id}/approve(id=${rental.id})}" method="post" style="display:inline;">
                     <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
                     <button type="submit" class="btn btn-sm"
@@ -42,6 +42,13 @@
                             onclick="return confirm('Confirm car returned? Car will be marked Available.');">Mark Returned</button>
                 </form>
             </div>
+        </div>
+
+        <div th:if="${rental.status == 'Pending' and car != null and car.status == 'Rented'}"
+             class="toast toast-err" style="margin-bottom:16px;">
+            <strong>Cannot approve this request.</strong>
+            The car <span th:text="${car.carName}"></span> has already been booked by another customer.
+            You can only <strong>reject</strong> this request.
         </div>
 
         <div class="detail-card">
