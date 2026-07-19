@@ -129,11 +129,41 @@ html, body { overflow-x: clip; }
     display: flex;
     flex-direction: column;
     gap: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, transform 0.15s, box-shadow 0.15s;
+}
+
+a.fleet-card:hover {
+    border-color: var(--accent);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 16px rgba(15, 23, 42, 0.08);
+    color: inherit;
+}
+
+a.fleet-card:focus { outline: none; }
+a.fleet-card:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
 }
 
 .fleet-card h3 {
     font-size: 17px;
     font-weight: 600;
+}
+
+.fleet-producer {
+    font-size: 11px;
+    color: var(--muted);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin: 0 0 4px;
+}
+
+.fleet-arrow {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--accent);
 }
 
 .fleet-spec {
@@ -194,6 +224,71 @@ html, body { overflow-x: clip; }
     color: var(--muted);
     border: 1px dashed var(--line);
     border-radius: 8px;
+}
+
+/* ---------- FLEET PAGER ---------- */
+.fleet-pager {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 24px;
+    gap: 12px;
+}
+
+.fleet-pager-info {
+    font-size: 13px;
+    color: var(--muted);
+}
+
+.fleet-pager-pages {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    flex-wrap: wrap;
+}
+
+.fleet-pager-pages > * {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 32px;
+    height: 32px;
+    padding: 0 10px;
+    font-size: 12px;
+    line-height: 1;
+    border: 1px solid var(--line);
+    border-radius: 4px;
+    color: var(--ink-2);
+    text-decoration: none;
+    background: var(--paper);
+    font-family: var(--font);
+    box-sizing: border-box;
+}
+
+.fleet-pager-pages a:hover {
+    border-color: var(--ink);
+    color: var(--ink);
+}
+
+.fleet-pager-pages a:focus { outline: none; }
+
+.fleet-pager-pages a:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+
+.fleet-pager-pages .current {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+    font-weight: 500;
+}
+
+.fleet-pager-pages .disabled {
+    color: var(--muted);
+    pointer-events: none;
+    cursor: not-allowed;
+    background: var(--paper-2);
 }
 
 /* ---------- STATS ---------- */

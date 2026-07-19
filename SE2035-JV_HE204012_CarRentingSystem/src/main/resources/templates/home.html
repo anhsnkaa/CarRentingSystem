@@ -45,7 +45,7 @@
             font-size: 13px;
             color: var(--muted);
             font-style: italic;
-            border-top: 1px solid var(--line-2);
+            border-top: 1px solid var(--line-2, #f1f5f9);
             padding-top: 10px;
         }
     </style>
@@ -56,8 +56,7 @@
 
 <section class="hero">
     <div class="container">
-        <h1>Rent a car in <span>minutes.</span></h1>
-        <p>Browse available vehicles, book online, manage your rentals.</p>
+        <h1>Car Renting System</h1>
         <div class="hero-cta">
             <a th:href="@{/login}" class="btn">Sign in</a>
             <a th:href="@{/register}" class="btn btn-ghost">Create account</a>
@@ -71,16 +70,22 @@
 <section class="section">
     <div class="container">
         <div class="section-head">
-            <p class="label">Fleet</p>
             <h2>Available cars</h2>
         </div>
 
         <div class="fleet" th:if="${!#lists.isEmpty(featuredCars)}">
-            <div class="fleet-card" th:each="c : ${featuredCars}"
-                 th:style="${c.status != 'Available' ? 'opacity:0.55;' : ''}">
+            <a th:each="c : ${featuredCars}"
+               th:href="@{/cars/{id}(id=${c.id})}"
+               class="fleet-card"
+               th:style="${c.status != 'Available' ? 'opacity:0.55;' : ''}">
                 <div style="display:flex; justify-content:space-between; align-items:start; gap:8px;">
-                    <h3 th:text="${c.carName}">Car Name</h3>
-                    <span th:class="${c.status == 'Available' ? 'status' : 'status'}"
+                    <div style="min-width:0;">
+                        <p class="fleet-producer"
+                           th:text="${producerMap[c.producerId] != null ? producerMap[c.producerId].producerName : ''}">
+                            Producer</p>
+                        <h3 th:text="${c.carName}">Car Name</h3>
+                    </div>
+                    <span class="status"
                           th:style="${c.status != 'Available' ? 'background:#e2e8f0; color:#475569;' : ''}"
                           th:text="${c.status}">Available</span>
                 </div>
@@ -95,13 +100,37 @@
                         <span th:text="${#numbers.formatDecimal(c.rentPrice, 0, 'COMMA', 0, 'POINT')}">0</span> đ
                         <small>/ day</small>
                     </span>
-                    <a th:href="@{/login}" class="fleet-cta">Book</a>
+                    <span class="fleet-arrow">View →</span>
                 </div>
-            </div>
+            </a>
         </div>
 
         <div class="fleet-empty" th:if="${#lists.isEmpty(featuredCars)}">
             No cars yet.
+        </div>
+
+        <div class="fleet-pager" th:if="${totalPages > 1}">
+            <div class="fleet-pager-info">
+                Showing
+                <span th:text="${(currentPage - 1) * pageSize + 1}">1</span>–<span th:text="${currentPage * pageSize < totalCars ? currentPage * pageSize : totalCars}">6</span>
+                of <span th:text="${totalCars}">0</span>
+            </div>
+            <div class="fleet-pager-pages">
+                <a th:if="${currentPage > 1}"
+                   th:href="@{/(page=${currentPage - 1}, size=${pageSize})}">← Prev</a>
+                <span th:unless="${currentPage > 1}" class="disabled">← Prev</span>
+
+                <th:block th:each="i : ${#numbers.sequence(1, totalPages)}">
+                    <span th:if="${i == currentPage}" class="current" th:text="${i}">1</span>
+                    <a th:unless="${i == currentPage}"
+                       th:href="@{/(page=${i}, size=${pageSize})}"
+                       th:text="${i}">1</a>
+                </th:block>
+
+                <a th:if="${currentPage < totalPages}"
+                   th:href="@{/(page=${currentPage + 1}, size=${pageSize})}">Next →</a>
+                <span th:unless="${currentPage < totalPages}" class="disabled">Next →</span>
+            </div>
         </div>
     </div>
 </section>
@@ -109,8 +138,7 @@
 <section class="section">
     <div class="container">
         <div class="section-head">
-            <p class="label">Reviews</p>
-            <h2>What customers say</h2>
+            <h2>Reviews</h2>
         </div>
 
         <div class="review-grid" th:if="${!#lists.isEmpty(latestReviews)}">

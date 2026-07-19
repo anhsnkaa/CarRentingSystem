@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${car.carName + ' - FU Car Renting'}">Car detail</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" th:href="@{/css/common.css}">
+    <link rel="stylesheet" th:href="@{/css/admin/admin.css}">
+    <style>
+        .detail-cta {
+            margin-top: 16px;
+            padding: 20px 24px;
+            border: 1px solid var(--line);
+            border-left: 4px solid var(--accent);
+            border-radius: 8px;
+            background: var(--accent-soft);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+        .detail-cta p {
+            margin: 0;
+            font-size: 14px;
+            color: var(--ink);
+            line-height: 1.5;
+        }
+        .detail-cta .actions {
+            display: flex;
+            gap: 8px;
+            flex-shrink: 0;
+        }
+    </style>
+</head>
+<body>
+
+<nav th:replace="~{fragments/navbar :: navbar}"></nav>
+
+<div class="app-layout">
+    <main class="app-content">
+        <div class="page-head">
+            <h1 th:text="${car.carName}">Car Name</h1>
+            <div class="actions">
+                <a th:href="@{/}" class="btn btn-ghost btn-sm">← Back to home</a>
+            </div>
+        </div>
+
+        <div th:if="${toastMessage}"
+             th:class="${toastType == 'success' ? 'toast toast-ok' : 'toast toast-err'}"
+             th:text="${toastMessage}"></div>
+
+        <div class="detail-card">
+            <div class="detail-row">
+                <dt>Producer</dt>
+                <dd th:text="${producer != null ? producer.producerName : '-'}">-</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Year</dt>
+                <dd th:text="${car.carModelYear}">2024</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Color</dt>
+                <dd th:text="${car.color}">White</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Capacity</dt>
+                <dd><span th:text="${car.capacity}">5</span> seats</dd>
+            </div>
+            <div class="detail-row">
+                <dt>Price</dt>
+                <dd>
+                    <span th:text="${#numbers.formatDecimal(car.rentPrice, 0, 'COMMA', 0, 'POINT')}">0</span> đ
+                    <small style="color:var(--muted); font-weight:400;">/ day</small>
+                </dd>
+            </div>
+            <div class="detail-row">
+                <dt>Status</dt>
+                <dd>
+                    <span th:class="${car.status == 'Available' ? 'pill pill-ok' : (car.status == 'Rented' ? 'pill pill-bad' : 'pill pill-muted')}"
+                          th:text="${car.status}">Available</span>
+                </dd>
+            </div>
+            <div class="detail-row">
+                <dt>Description</dt>
+                <dd th:text="${car.description}">Description</dd>
+            </div>
+        </div>
+
+        <div class="detail-cta">
+            <p>Sign in to book this car and manage your rentals.</p>
+            <div class="actions">
+                <a th:href="@{/login}" class="btn">Sign in</a>
+                <a th:href="@{/register}" class="btn btn-ghost">Create account</a>
+            </div>
+        </div>
+
+        <div class="page-head" style="margin-top:32px;">
+            <h2>Reviews</h2>
+            <span class="sub" th:if="${reviewCount > 0}">
+                <span th:text="${#numbers.formatDecimal(avgRating, 1, 'COMMA', 1, 'POINT')}">0.0</span> / 5 ·
+                <span th:text="${reviewCount}">0</span> review(s)
+            </span>
+        </div>
+
+        <div th:if="${#lists.isEmpty(reviews)}" class="card-empty">
+            No reviews yet for this car.
+        </div>
+
+        <div th:if="${!#lists.isEmpty(reviews)}">
+            <div th:each="rv : ${reviews}"
+                 style="padding:16px 0; border-top:1px solid var(--line-2, #f1f5f9);">
+                <div style="display:flex; align-items:center; gap:10px; margin-bottom:6px;">
+                    <div class="stars"
+                         th:text="${#strings.repeat('★', rv.reviewStar) + #strings.repeat('☆', 5 - rv.reviewStar)}">
+                        ★★★★★
+                    </div>
+                    <strong style="font-size:13px; color:var(--ink);"
+                            th:text="${reviewCustomerMap[rv.carRenId] != null ? reviewCustomerMap[rv.carRenId].fullName : 'Anonymous'}">
+                        Customer
+                    </strong>
+                </div>
+                <p style="margin:0; color:var(--ink-2); font-size:14px;"
+                   th:text="${rv.comment}">Comment</p>
+            </div>
+        </div>
+    </main>
+</div>
+
+<th:block th:replace="~{fragments/scripts :: scripts}"></th:block>
+</body>
+</html>
