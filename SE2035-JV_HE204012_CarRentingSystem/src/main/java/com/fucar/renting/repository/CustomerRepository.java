@@ -18,7 +18,7 @@ public interface CustomerRepository extends JpaRepository<Customer, Integer> {
     @Query("select  count(c) > 0 from Customer c where c.identityCard = :identityCard")
     boolean existsByIdentityCard(@Param("identityCard") String identityCard);
 
-    @Query("select count(c) > 0 from Customer c where c.licenceNumber =: licenceNumber")
+    @Query("select count(c) > 0 from Customer c where c.licenceNumber = :licenceNumber")
     boolean existsByLicenceNumber(@Param("licenceNumber") String licenceNumber);
 
     @Query("SELECT c FROM Customer c WHERE " +

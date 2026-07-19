@@ -82,10 +82,22 @@ public class AuthController {
             ra.addFlashAttribute("toastMessage", "Registration successful. Please sign in.");
             ra.addFlashAttribute("toastType", "success");
         } catch (IllegalArgumentException e) {
-            model.addAttribute("error", e.getMessage());
+            String msg = e.getMessage() == null ? "Failed to register" : e.getMessage();
+            String lower = msg.toLowerCase();
+            if (lower.contains("account name")) {
+                bindingResult.rejectValue("accountName", "accountName.exists", msg);
+            } else if (lower.contains("mobile")) {
+                bindingResult.rejectValue("mobile", "mobile.exists", msg);
+            } else if (lower.contains("identity")) {
+                bindingResult.rejectValue("identityCard", "identityCard.exists", msg);
+            } else if (lower.contains("licence")) {
+                bindingResult.rejectValue("licenceNumber", "licenceNumber.exists", msg);
+            } else {
+                model.addAttribute("error", msg);
+            }
             return "auth/register";
         } catch (EmailAlreadyExistsException e) {
-            model.addAttribute("error", "Email already registered!");
+            bindingResult.rejectValue("email", "email.exists", "Email already registered!");
             return "auth/register";
         }
         return "redirect:/login?registered";

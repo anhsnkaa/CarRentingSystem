@@ -23,8 +23,20 @@ public class RegisterServiceImpl implements RegisterService {
         if (request.getPassword() == null || request.getPassword().isBlank()) {
             throw new IllegalArgumentException("Password must not be empty");
         }
+        if (accountService.existsByAccountName(request.getAccountName())) {
+            throw new IllegalArgumentException("Account name already taken");
+        }
         if (accountService.existsByEmail(request.getEmail())) {
             throw new EmailAlreadyExistsException(request.getEmail());
+        }
+        if (customerService.existsByMobile(request.getMobile())) {
+            throw new IllegalArgumentException("Mobile already registered");
+        }
+        if (customerService.existsByIdentityCard(request.getIdentityCard())) {
+            throw new IllegalArgumentException("Identity card already registered");
+        }
+        if (customerService.existsByLicenceNumber(request.getLicenceNumber())) {
+            throw new IllegalArgumentException("Licence number already registered");
         }
 
         Account savedAccount = accountService.register(request);

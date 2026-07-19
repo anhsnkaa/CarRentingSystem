@@ -22,4 +22,8 @@ public interface AccountService {
     Account register(CustomerRegisterRequest request);
 
     Account createAdmin(String email, String password);
+
+    Account createAccount(String accountName, String email, String password, String role);
+
+    void updateAccount(Integer id, String accountName, String email, String password);
 }

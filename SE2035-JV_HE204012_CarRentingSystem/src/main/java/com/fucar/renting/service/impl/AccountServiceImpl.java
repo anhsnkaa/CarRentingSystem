@@ -51,7 +51,7 @@ public class AccountServiceImpl implements AccountService {
     public Account register(CustomerRegisterRequest request) {
         Account account = Account.builder()
                 .email(request.getEmail())
-                .accountName(request.getEmail().split("@")[0])
+                .accountName(request.getAccountName())
                 .password(request.getPassword())
                 .role("CUSTOMER")
                 .build();
@@ -68,5 +68,30 @@ public class AccountServiceImpl implements AccountService {
                 .role("ADMIN")
                 .build();
         return accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public Account createAccount(String accountName, String email, String password, String role) {
+        Account account = Account.builder()
+                .accountName(accountName)
+                .email(email)
+                .password(password)
+                .role(role)
+                .build();
+        return accountRepository.save(account);
+    }
+
+    @Override
+    @Transactional
+    public void updateAccount(Integer id, String accountName, String email, String password) {
+        Account account = accountRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("Account not found: " + id));
+        account.setAccountName(accountName);
+        account.setEmail(email);
+        if (password != null && !password.isBlank()) {
+            account.setPassword(password);
+        }
+        accountRepository.save(account);
     }
 }

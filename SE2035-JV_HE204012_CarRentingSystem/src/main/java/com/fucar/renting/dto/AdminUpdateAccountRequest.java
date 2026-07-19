@@ -10,11 +10,7 @@ import java.time.LocalDate;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerRegisterRequest {
-
-    @NotBlank(message = "Email is required")
-    @Email(message = "Invalid email format")
-    private String email;
+public class AdminUpdateAccountRequest {
 
     @NotBlank(message = "Account name is required")
     @Size(min = 3, max = 100, message = "Account name must be 3-100 characters")
@@ -22,13 +18,18 @@ public class CustomerRegisterRequest {
             message = "Account name may only contain letters, digits, dot, underscore, or dash")
     private String accountName;
 
-    @NotBlank(message = "Password is required")
+    @NotBlank(message = "Email is required")
+    @Email(message = "Invalid email format")
+    private String email;
+
     private String password;
 
-    @NotBlank(message = "Name is required")
+    @NotBlank(message = "Full name is required")
+    @Size(max = 200)
     private String fullName;
 
     @NotBlank(message = "Mobile is required")
+    @Size(max = 15)
     private String mobile;
 
     @NotNull(message = "Birthday is required")
@@ -36,9 +37,11 @@ public class CustomerRegisterRequest {
     private LocalDate birthday;
 
     @NotBlank(message = "Identity card is required")
+    @Size(max = 20)
     private String identityCard;
 
     @NotBlank(message = "Licence number is required")
+    @Size(max = 20)
     private String licenceNumber;
 
     @NotNull(message = "Licence date is required")

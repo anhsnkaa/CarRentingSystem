@@ -20,17 +20,23 @@
     <form th:action="@{/register}" th:object="${registerRequest}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-        <div class="field-row cols-2">
-            <div class="field">
-                <label>Email</label>
-                <input type="email" th:field="*{email}" placeholder="you@example.com" required>
-                <span class="err" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
-            </div>
-            <div class="field">
-                <label>Password</label>
-                <input type="password" th:field="*{password}" placeholder="Your password" required>
-                <span class="err" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
-            </div>
+        <div class="field">
+            <label>Account name</label>
+            <input type="text" th:field="*{accountName}" placeholder="e.g. john.doe" required>
+
+            <span class="err" th:if="${#fields.hasErrors('accountName')}" th:errors="*{accountName}"></span>
+        </div>
+
+        <div class="field">
+            <label>Password</label>
+            <input type="password" th:field="*{password}" placeholder="Your password" required>
+            <span class="err" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></span>
+        </div>
+
+        <div class="field">
+            <label>Email</label>
+            <input type="email" th:field="*{email}" placeholder="you@example.com" required>
+            <span class="err" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></span>
         </div>
 
         <div class="field">

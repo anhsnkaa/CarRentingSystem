@@ -19,6 +19,9 @@
     <main class="app-content">
         <div class="page-head">
             <h1>Customers</h1>
+            <div class="actions">
+                <a th:href="@{/admin/customers/new}" class="btn btn-sm">+ Create account</a>
+            </div>
         </div>
 
         <div th:if="${toastMessage}" th:class="${toastType == 'success' ? 'toast toast-ok' : 'toast toast-err'}"

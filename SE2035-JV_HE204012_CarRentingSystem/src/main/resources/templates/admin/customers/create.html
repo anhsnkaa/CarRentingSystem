@@ -2,7 +2,7 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Edit Customer</title>
+    <title>Create Account</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -18,28 +18,31 @@
 
     <main class="app-content narrow">
         <div class="page-head">
-            <h1>Edit Customer</h1>
+            <h1>Create Customer Account</h1>
             <div class="actions">
                 <a th:href="@{/admin/customers}" class="btn btn-ghost btn-sm">Back</a>
             </div>
         </div>
 
-        <form th:action="@{/admin/customers/{id}(id=${customerId})}"
-              th:object="${updateRequest}" method="post" class="form-card">
+        <div th:if="${error}" class="toast toast-err" th:text="${error}"></div>
+
+        <form th:action="@{/admin/customers/new}"
+              th:object="${createAccountRequest}" method="post" class="form-card">
             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-            <input type="hidden" name="accountId" th:value="${accountId}"/>
 
             <div class="section-title">Account</div>
 
             <div class="field">
-                <input type="text" th:field="*{accountName}" required>
-                <small class="hint"></small>
+                <label>Account name (login username)</label>
+                <input type="text" th:field="*{accountName}"
+                       placeholder="e.g. john.doe" required>
+
                 <span class="err" th:errors="*{accountName}"></span>
             </div>
 
             <div class="field">
                 <label>Password</label>
-                <input type="password" th:field="*{password}" placeholder="Change customer pass here">
+                <input type="password" th:field="*{password}" required>
                 <span class="err" th:errors="*{password}"></span>
             </div>
 
@@ -66,7 +69,7 @@
                 <div class="field">
                     <label>Birthday</label>
                     <input type="date" name="birthday" id="birthday"
-                           th:value="${updateRequest.birthday != null} ? ${#temporals.format(updateRequest.birthday, 'yyyy-MM-dd')} : ''"
+                           th:value="${createAccountRequest.birthday != null} ? ${#temporals.format(createAccountRequest.birthday, 'yyyy-MM-dd')} : ''"
                            required>
                     <span class="err" th:errors="*{birthday}"></span>
                 </div>
@@ -88,14 +91,14 @@
             <div class="field">
                 <label>Licence Date</label>
                 <input type="date" name="licenceDate" id="licenceDate"
-                       th:value="${updateRequest.licenceDate != null} ? ${#temporals.format(updateRequest.licenceDate, 'yyyy-MM-dd')} : ''"
+                       th:value="${createAccountRequest.licenceDate != null} ? ${#temporals.format(createAccountRequest.licenceDate, 'yyyy-MM-dd')} : ''"
                        required>
                 <span class="err" th:errors="*{licenceDate}"></span>
             </div>
 
             <div class="form-actions">
                 <a th:href="@{/admin/customers}" class="btn btn-ghost">Cancel</a>
-                <button type="submit" class="btn">Update</button>
+                <button type="submit" class="btn">Create account</button>
             </div>
         </form>
     </main>

@@ -18,9 +18,6 @@ public class CsrfInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String path = request.getRequestURI();
-        if (isCsrfExempt(path)) {
-            return true;
-        }
 
         HttpSession session = request.getSession(true);
         String token = (String) session.getAttribute(SESSION_ATTR);
@@ -29,6 +26,10 @@ public class CsrfInterceptor implements HandlerInterceptor {
             session.setAttribute(SESSION_ATTR, token);
         }
         request.setAttribute(MODEL_ATTR, token);
+
+        if (isCsrfExempt(path)) {
+            return true;
+        }
 
         String method = request.getMethod();
         if (!"GET".equalsIgnoreCase(method) && !"HEAD".equalsIgnoreCase(method)) {
