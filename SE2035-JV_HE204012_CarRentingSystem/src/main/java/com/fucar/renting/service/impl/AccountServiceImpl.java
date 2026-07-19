@@ -94,4 +94,10 @@ public class AccountServiceImpl implements AccountService {
         }
         accountRepository.save(account);
     }
+
+    @Override
+    @Transactional
+    public void deleteById(Integer id) {
+        accountRepository.deleteById(id);
+    }
 }

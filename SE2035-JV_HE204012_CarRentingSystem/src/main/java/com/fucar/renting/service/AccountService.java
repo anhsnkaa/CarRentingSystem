@@ -26,4 +26,6 @@ public interface AccountService {
     Account createAccount(String accountName, String email, String password, String role);
 
     void updateAccount(Integer id, String accountName, String email, String password);
+
+    void deleteById(Integer id);
 }
